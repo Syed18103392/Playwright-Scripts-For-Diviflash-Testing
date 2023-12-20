@@ -11,7 +11,7 @@ test("dual-button", async ({ page }) => {
 	);
 	await init.open_divi_builder(page);
 	await init.insert_module(page, "Dual Button", "difl_dual_button");
-
+	await init.fill_contents(page);
 	// Save and Exit builder
 	await init.save_and_exit_builder(page);
 

@@ -36,8 +36,23 @@ export async function open_divi_builder(page) {
 	await page.getByRole("button", { name: "Start Building" }).click();
 	await page.locator('span.column-block[data-layout="4_4"]').click();
 }
-
-export async function upload_image(page) {
+//FIXME - Complete this functionality
+export async function fill_contents(page) {
+	const tabs = await page.$$(
+		".et-fb-form__toggle:not(.et-fb-form__toggle-opened)"
+	);
+	for (const tab of tabs) {
+		const fields = await tab.$$("input.et-fb-settings-option-input");
+		for (const field of fields) {
+			await field.fill("button");
+		}
+		await tab.click();
+	}
+}
+async function fill_inputs(page) {
+	await page.locator('input[type="text"]').fill("button");
+}
+async function upload_image(page) {
 	await page.locator(".et-fb-item-addable-button").click();
 	await page.waitForSelector("#menu-item-browse");
 	await page.locator("#menu-item-browse").click();
