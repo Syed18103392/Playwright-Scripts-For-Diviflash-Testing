@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import * as init from "./init";
+import * as init from "./controller";
 
 test("dual-button", async ({ page }) => {
 	await init.login_to_site_and_create_page(

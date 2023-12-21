@@ -1,5 +1,5 @@
-import { expect } from "@playwright/test";
-
+import * as contentElements from "./content-elements";
+import * as compose from "./composition-helpers";
 export async function login_to_site_and_create_page(
 	page,
 	page_name,
@@ -36,31 +36,40 @@ export async function open_divi_builder(page) {
 	await page.getByRole("button", { name: "Start Building" }).click();
 	await page.locator('span.column-block[data-layout="4_4"]').click();
 }
-//FIXME - Complete this functionality
 export async function fill_contents(page) {
-	const tabs = await page.$$(
-		".et-fb-form__toggle:not(.et-fb-form__toggle-opened)"
-	);
-	for (const tab of tabs) {
-		const fields = await tab.$$("input.et-fb-settings-option-input");
-		for (const field of fields) {
-			await field.fill("button");
-		}
-		await tab.click();
-	}
-}
-async function fill_inputs(page) {
-	await page.locator('input[type="text"]').fill("button");
-}
-async function upload_image(page) {
-	await page.locator(".et-fb-item-addable-button").click();
-	await page.waitForSelector("#menu-item-browse");
-	await page.locator("#menu-item-browse").click();
-	await page.locator("ul.attachments li:first-child").click();
-	await page.locator("button.media-button-insert").click();
+	await contentElements.enableContentTab(page);
+	//add data
+	await contentElements.button({
+		page: page,
+		toggle_name: "Left button",
+		click: false,
+		btn_name: "First Button",
+		btn_url: "google.com",
+	});
+	//add button data
+	await contentElements.button({
+		page: page,
+		toggle_name: "Right Button",
+		click: true,
+		btn_name: "Last Button",
+		btn_url: "google.com",
+	});
+	//button separator
+	//toggle setting
+	await compose.toggle_control({
+		page: page,
+		control_name: "Button Separator",
+	});
+	await compose.controlToggle({
+		page: page,
+		label: "Use button separator",
+		trigger: "YES",
+	});
 }
 
+//FIXME - this load before page load
 export async function remove_test_page(page) {
+	await page.waitForSelector("body.wp-admin");
 	await page.locator("#wp-admin-bar-edit").click();
 	await page.getByRole("button", { name: "Move to trash" }).click();
 }
