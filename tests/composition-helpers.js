@@ -76,8 +76,8 @@ export async function controlSwitch({ page, label }) {
 		page: page,
 		fieldName: label,
 	});
-	
-		await parent.locator(".et-core-control-toggle").click();
+
+	await parent.locator(".et-core-control-toggle").click();
 }
 
 /**
@@ -87,7 +87,7 @@ export async function controlSwitch({ page, label }) {
  * @param {number} props.iconNumber - The index of the icon to choose (1-based index).
  * @returns {Promise<void>} - A Promise that resolves when the icon is chosen.
  */
-export async function chooseIcon({page,iconNumber,}){
+export async function chooseIcon({ page, iconNumber, }) {
 	const parent = await getParentByTitle({
 		page: page,
 		fieldName: 'Icon'
@@ -105,15 +105,27 @@ export async function chooseIcon({page,iconNumber,}){
  * @param {boolean} props.transparent - Whether to choose a transparent color.
  * @returns {Promise<void>} - A Promise that resolves when the color is chosen.
  */
-export async function chooseColor({page,label,colorNumber,transparent}){
+export async function chooseColor({ page, label, colorNumber, transparent }) {
 	const parent = await getParentByTitle({
 		page: page,
 		fieldName: label
 	})
 	await parent.locator('.et-fb-settings-color-manager__swatches-row').nth(colorNumber).
-	locator('.et-fb-settings-color-manager__swatches-swatch').nth(1).click();
-	if(transparent){
+		locator('.et-fb-settings-color-manager__swatches-swatch').nth(1).click();
+	if (transparent) {
 		await parent.locator('.et-fb-settings-color-manager__reset-color').click();
+	}
+}
+export async function setting_slider({ page, label, slide_value }) {
+	const parent = await getParentByTitle({
+		page: page,
+		fieldName: label
+	})
+	await parent.locator('input.et-fb-settings-option-input').click();
+
+	// Press the "Up" key 10 times
+	for (let i = 0; i < slide_value; i++) {
+		await page.keyboard.press('ArrowUp');
 	}
 }
 // async function upload_image(page) {

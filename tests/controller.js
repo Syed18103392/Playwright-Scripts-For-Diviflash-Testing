@@ -89,7 +89,16 @@ export async function fill_contents(page) {
 		colorNumber: 3,
 		transparent: true,
 	})
-
+	//turn on use font size 
+	await compose.controlSwitch({
+		page:page,
+		label:'Use Icon Font Size'
+	});
+	await compose.setting_slider({
+		page:page,
+		label: 'Icon Font Size',
+		slide_value:10
+	})
 }
 
 export async function remove_test_page(page) {
