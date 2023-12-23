@@ -63,14 +63,57 @@ export async function selectField({ page, label, option_name }) {
 	await page.getByText(option_name, { exact: true }).click();
 }
 
-export async function controlToggle({ page, label, trigger }) {
+/**
+ * Toggles the control switch associated with a specified label.
+ *
+ * @param {Object} props - The parameters for the function.
+ * @param {Page} props.page - The Playwright page object.
+ * @param {string} props.label - The label associated with the control switch.
+ * @returns {Promise<void>} - A Promise that resolves when the control switch is toggled.
+ */
+export async function controlSwitch({ page, label }) {
 	const parent = await getParentByTitle({
 		page: page,
 		fieldName: label,
 	});
-	const status = await parent.getByText(trigger);
-	if (!status) {
+	
 		await parent.locator(".et-core-control-toggle").click();
+}
+
+/**
+ * Choose an icon from the icon list associated with a specified label.
+ * @param {Object} props - The parameters for the function.
+ * @param {Page} props.page - The Playwright page object.
+ * @param {number} props.iconNumber - The index of the icon to choose (1-based index).
+ * @returns {Promise<void>} - A Promise that resolves when the icon is chosen.
+ */
+export async function chooseIcon({page,iconNumber,}){
+	const parent = await getParentByTitle({
+		page: page,
+		fieldName: 'Icon'
+	});
+	await parent.locator(`li:nth-child(${iconNumber})`).click();
+}
+
+/**
+ * Choose a color from the color manager associated with a specified label.
+ * 
+ * @param {Object} props - The parameters for the function.
+ * @param {Page} props.page - The Playwright page object.
+ * @param {string} props.label - The label associated with the color manager.
+ * @param {number} props.colorNumber - The index of the color swatch to choose (1-based index).
+ * @param {boolean} props.transparent - Whether to choose a transparent color.
+ * @returns {Promise<void>} - A Promise that resolves when the color is chosen.
+ */
+export async function chooseColor({page,label,colorNumber,transparent}){
+	const parent = await getParentByTitle({
+		page: page,
+		fieldName: label
+	})
+	await parent.locator('.et-fb-settings-color-manager__swatches-row').nth(colorNumber).
+	locator('.et-fb-settings-color-manager__swatches-swatch').nth(1).click();
+	if(transparent){
+		await parent.locator('.et-fb-settings-color-manager__reset-color').click();
 	}
 }
 // async function upload_image(page) {

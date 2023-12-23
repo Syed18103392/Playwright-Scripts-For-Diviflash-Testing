@@ -60,17 +60,41 @@ export async function fill_contents(page) {
 		page: page,
 		control_name: "Button Separator",
 	});
-	await compose.controlToggle({
+
+	//Turn on button separator
+	await compose.controlSwitch({
 		page: page,
 		label: "Use button separator",
-		trigger: "YES",
 	});
+	//add separetor text 
+	await compose.fillInputField({
+		page: page,
+		label	:	'Separator text',
+		text: 'Ami separator text'
+	})
+	// Use icon
+	await compose.controlSwitch({
+		page: page,
+		label:	'Use Icon'
+	})
+	//choose icon 
+	await compose.chooseIcon({
+		page: page,
+		iconNumber : '22',
+	})
+	// Choose icon color 
+	await compose.chooseColor({
+		page: page,
+		label: 'Icon Color',
+		colorNumber: 3,
+		transparent: true,
+	})
+
 }
 
-//FIXME - this load before page load
 export async function remove_test_page(page) {
-	await page.waitForSelector("body.wp-admin");
 	await page.locator("#wp-admin-bar-edit").click();
+	await page.waitForSelector("body.wp-admin");
 	await page.getByRole("button", { name: "Move to trash" }).click();
 }
 export async function insert_module(page, module_name, module_selector) {
