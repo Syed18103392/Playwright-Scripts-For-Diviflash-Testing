@@ -1,4 +1,7 @@
 //SECTION - Helping Hand
+
+import { expect } from "@playwright/test";
+
 /**
  * Get the parent element by its title and a specific field name.
  *
@@ -87,17 +90,17 @@ export async function controlSwitch({ page, label }) {
  * @param {number} props.iconNumber - The index of the icon to choose (1-based index).
  * @returns {Promise<void>} - A Promise that resolves when the icon is chosen.
  */
-export async function chooseIcon({ page, iconNumber, }) {
+export async function chooseIcon({ page, iconNumber }) {
 	const parent = await getParentByTitle({
 		page: page,
-		fieldName: 'Icon'
+		fieldName: "Icon",
 	});
 	await parent.locator(`li:nth-child(${iconNumber})`).click();
 }
 
 /**
  * Choose a color from the color manager associated with a specified label.
- * 
+ *
  * @param {Object} props - The parameters for the function.
  * @param {Page} props.page - The Playwright page object.
  * @param {string} props.label - The label associated with the color manager.
@@ -108,24 +111,30 @@ export async function chooseIcon({ page, iconNumber, }) {
 export async function chooseColor({ page, label, colorNumber, transparent }) {
 	const parent = await getParentByTitle({
 		page: page,
-		fieldName: label
-	})
-	await parent.locator('.et-fb-settings-color-manager__swatches-row').nth(colorNumber).
-		locator('.et-fb-settings-color-manager__swatches-swatch').nth(1).click();
+		fieldName: label,
+	});
+	await parent
+		.locator(".et-fb-settings-color-manager__swatches-row")
+		.nth(colorNumber)
+		.locator(".et-fb-settings-color-manager__swatches-swatch")
+		.nth(1)
+		.click();
 	if (transparent) {
-		await parent.locator('.et-fb-settings-color-manager__reset-color').click();
+		await parent
+			.locator(".et-fb-settings-color-manager__reset-color")
+			.click();
 	}
 }
 export async function setting_slider({ page, label, slide_value }) {
 	const parent = await getParentByTitle({
 		page: page,
-		fieldName: label
-	})
-	await parent.locator('input.et-fb-settings-option-input').click();
+		fieldName: label,
+	});
+	await parent.locator("input.et-fb-settings-option-input").click();
 
 	// Press the "Up" key 10 times
 	for (let i = 0; i < slide_value; i++) {
-		await page.keyboard.press('ArrowUp');
+		await page.keyboard.press("ArrowUp");
 	}
 }
 // async function upload_image(page) {
@@ -135,3 +144,13 @@ export async function setting_slider({ page, label, slide_value }) {
 // 	await page.locator("ul.attachments li:first-child").click();
 // 	await page.locator("button.media-button-insert").click();
 // }
+//SECTION - Validation Section
+//FIXME -
+export async function content_validation_type_text({
+	page,
+	selector,
+	expected_text,
+}) {
+	expect(await page.locator(selector)).toHaveText(expected_text);
+}
+//!SECTION

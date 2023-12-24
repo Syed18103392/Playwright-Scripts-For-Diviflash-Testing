@@ -31,7 +31,6 @@ export async function button({
 	//fill text & Url
 	await compose.fillInputField({ page: page, label: "Text", text: btn_name });
 	await compose.fillInputField({ page: page, label: "URL", text: btn_url });
-
 	//set Link Target
 
 	if (in_the_new_tab) {

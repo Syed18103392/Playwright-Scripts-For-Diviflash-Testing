@@ -46,6 +46,13 @@ export async function fill_contents(page) {
 		btn_name: "First Button",
 		btn_url: "google.com",
 	});
+
+	//validation
+	await compose.content_validation_type_text({
+		page: page,
+		selector: ".df_button_left",
+		expected_text: "Last Button",
+	});
 	//add button data
 	await contentElements.button({
 		page: page,
@@ -54,6 +61,7 @@ export async function fill_contents(page) {
 		btn_name: "Last Button",
 		btn_url: "google.com",
 	});
+
 	//button separator
 	//toggle setting
 	await compose.toggle_control({
@@ -66,44 +74,44 @@ export async function fill_contents(page) {
 		page: page,
 		label: "Use button separator",
 	});
-	//add separetor text 
+	//add separetor text
 	await compose.fillInputField({
 		page: page,
-		label	:	'Separator text',
-		text: 'Ami separator text'
-	})
+		label: "Separator text",
+		text: "Ami separator text",
+	});
 	// Use icon
 	await compose.controlSwitch({
 		page: page,
-		label:	'Use Icon'
-	})
-	//choose icon 
+		label: "Use Icon",
+	});
+	//choose icon
 	await compose.chooseIcon({
 		page: page,
-		iconNumber : '22',
-	})
-	// Choose icon color 
+		iconNumber: "22",
+	});
+	// Choose icon color
 	await compose.chooseColor({
 		page: page,
-		label: 'Icon Color',
+		label: "Icon Color",
 		colorNumber: 3,
 		transparent: true,
-	})
-	//turn on use font size 
+	});
+	//turn on use font size
 	await compose.controlSwitch({
-		page:page,
-		label:'Use Icon Font Size'
+		page: page,
+		label: "Use Icon Font Size",
 	});
 	await compose.setting_slider({
-		page:page,
-		label: 'Icon Font Size',
-		slide_value:10
-	})
+		page: page,
+		label: "Icon Font Size",
+		slide_value: 10,
+	});
 }
 
 export async function remove_test_page(page) {
 	await page.locator("#wp-admin-bar-edit").click();
-	await page.waitForSelector("body.wp-admin");
+	// await page.waitForSelector("body.wp-admin");
 	await page.getByRole("button", { name: "Move to trash" }).click();
 }
 export async function insert_module(page, module_name, module_selector) {
