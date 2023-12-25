@@ -45,13 +45,14 @@ export async function fill_contents(page) {
 		click: false,
 		btn_name: "First Button",
 		btn_url: "google.com",
+		in_the_new_tab: false
 	});
 
 	//validation
 	await compose.content_validation_type_text({
 		page: page,
 		selector: ".df_button_left",
-		expected_text: "Last Button",
+		expected_text: "First Button",
 	});
 	//add button data
 	await contentElements.button({
@@ -60,6 +61,13 @@ export async function fill_contents(page) {
 		click: true,
 		btn_name: "Last Button",
 		btn_url: "google.com",
+		in_the_new_tab: true,
+	});
+	//validation
+	await compose.content_validation_type_text({
+		page: page,
+		selector: ".df_button_right",
+		expected_text: "Last Button",
 	});
 
 	//button separator
@@ -80,6 +88,13 @@ export async function fill_contents(page) {
 		label: "Separator text",
 		text: "Ami separator text",
 	});
+	//validation
+	await compose.content_validation_type_text({
+		page: page,
+		selector: ".button-separator",
+		expected_text: "Ami separator text",
+	});
+
 	// Use icon
 	await compose.controlSwitch({
 		page: page,

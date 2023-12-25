@@ -1,4 +1,5 @@
 import * as compose from "./composition-helpers";
+import { Page } from 'playwright';
 
 //ANCHOR - enable content tab
 export async function enableContentTab(page) {
@@ -24,6 +25,13 @@ export async function button({
 	btn_name,
 	btn_url,
 	in_the_new_tab,
+}: {
+	page: Page;
+	toggle_name: string;
+	click: boolean;
+	btn_name: string;
+	btn_url: string;
+	in_the_new_tab: boolean;
 }) {
 	if (click) {
 		await compose.toggle_control({ page: page, control_name: toggle_name });

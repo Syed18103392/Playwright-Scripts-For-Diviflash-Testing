@@ -151,6 +151,6 @@ export async function content_validation_type_text({
 	selector,
 	expected_text,
 }) {
-	expect(await page.locator(selector)).toHaveText(expected_text);
+	await expect.soft(page.frameLocator('iFrame').locator(selector)).toContainText(expected_text);
 }
 //!SECTION
