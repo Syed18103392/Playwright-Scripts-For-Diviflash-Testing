@@ -3,6 +3,16 @@
 import { expect } from "@playwright/test";
 import { Page } from "playwright"
 
+
+
+
+export async function enableContentTab(page:Page) {
+	await page.locator(".et-fb-tabs__item.et-fb-tabs__item--general").click();
+}
+export async function enableDesignTab(page:Page) {
+	await page.locator(".et-fb-tabs__item.et-fb-tabs__item--advanced").click();
+}
+
 /**
  * Get the parent element by its title and a specific field name.
  *

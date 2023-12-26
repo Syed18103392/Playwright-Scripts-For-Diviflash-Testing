@@ -3,11 +3,11 @@ import * as compose from "./composition-helpers";
 import { Page } from 'playwright';
 
 export async function login_to_site_and_create_page(
-	page:Page,
-	page_name:string,
-	url:string,
-	username:string,
-	password:string
+	page: Page,
+	page_name: string,
+	url: string,
+	username: string,
+	password: string
 ) {
 	await page.goto(`http://${url}/wp-admin`);
 	await page.getByLabel("Username or Email Address").fill(username);
@@ -38,8 +38,10 @@ export async function open_divi_builder(page) {
 	await page.getByRole("button", { name: "Start Building" }).click();
 	await page.locator('span.column-block[data-layout="4_4"]').click();
 }
+
+//SECTION - Add Content
 export async function fill_contents(page) {
-	await contentElements.enableContentTab(page);
+	await compose.enableContentTab(page);
 	//add data
 	await contentElements.button({
 		page: page,
@@ -125,7 +127,13 @@ export async function fill_contents(page) {
 		slide_value: 10,
 	});
 }
+//!SECTION
+//SECTION - Add Design
+export async function addDesign(page:Page) {
+	compose.enableDesignTab(page);
+}
 
+//!SECTION
 export async function remove_test_page(page) {
 	await page.locator("#wp-admin-bar-edit").click();
 	// await page.waitForSelector("body.wp-admin");

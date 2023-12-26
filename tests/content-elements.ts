@@ -1,10 +1,6 @@
 import * as compose from "./composition-helpers";
 import { Page } from 'playwright';
 
-//ANCHOR - enable content tab
-export async function enableContentTab(page) {
-	await page.locator(".et-fb-tabs__item.et-fb-tabs__item--general").click();
-}
 
 /**
  * Perform some action on button.
