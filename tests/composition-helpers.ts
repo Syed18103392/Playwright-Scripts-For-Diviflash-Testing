@@ -1,6 +1,7 @@
 //SECTION - Helping Hand
 
 import { expect } from "@playwright/test";
+import { Page } from "playwright"
 
 /**
  * Get the parent element by its title and a specific field name.
@@ -10,7 +11,13 @@ import { expect } from "@playwright/test";
  * @param {string} props.fieldName - The name of the field to search for.
  * @returns {Promise<YourParentType>} A promise that resolves to the parent element.
  */
-async function getParentByTitle({ page, fieldName }) {
+async function getParentByTitle({
+	page,
+	fieldName
+}: {
+	page: Page,
+	fieldName: string
+}) {
 	const child = await page.getByText(fieldName, { exact: true });
 	const parent = await page
 		.locator(".et-fb-form__group")
@@ -27,7 +34,7 @@ async function getParentByTitle({ page, fieldName }) {
  * @param {string} props.control_name - The name of the control element to toggle.
  * @returns {Promise<void>} A promise that resolves when the control is toggled.
  */
-export async function toggle_control({ page, control_name }) {
+export async function toggle_control({ page, control_name }: { page: Page, control_name: string }) {
 	await page.getByText(control_name, { exact: true }).click();
 }
 
@@ -40,7 +47,7 @@ export async function toggle_control({ page, control_name }) {
  * @param {string} props.text - The text to fill into the input field.
  * @returns {Promise<void>} A promise that resolves when the input field is filled.
  */
-export async function fillInputField({ page, label, text }) {
+export async function fillInputField({ page, label, text }: { page: Page, label: string, text: string }) {
 	const parent = await getParentByTitle({
 		page: page,
 		fieldName: label,
@@ -57,7 +64,7 @@ export async function fillInputField({ page, label, text }) {
  * @param {string} props.option_name - The name of the option to select.
  * @returns {Promise<void>} A promise that resolves when the option is selected.
  */
-export async function selectField({ page, label, option_name }) {
+export async function selectField({ page, label, option_name }: { page: Page, label: string, option_name: string }) {
 	const parent = await getParentByTitle({
 		page: page,
 		fieldName: label,
@@ -74,7 +81,7 @@ export async function selectField({ page, label, option_name }) {
  * @param {string} props.label - The label associated with the control switch.
  * @returns {Promise<void>} - A Promise that resolves when the control switch is toggled.
  */
-export async function controlSwitch({ page, label }) {
+export async function controlSwitch({ page, label }: { page: Page, label: string }) {
 	const parent = await getParentByTitle({
 		page: page,
 		fieldName: label,
@@ -87,10 +94,10 @@ export async function controlSwitch({ page, label }) {
  * Choose an icon from the icon list associated with a specified label.
  * @param {Object} props - The parameters for the function.
  * @param {Page} props.page - The Playwright page object.
- * @param {number} props.iconNumber - The index of the icon to choose (1-based index).
+ * @param {string} props.iconNumber - The index of the icon to choose (1-based index).
  * @returns {Promise<void>} - A Promise that resolves when the icon is chosen.
  */
-export async function chooseIcon({ page, iconNumber }) {
+export async function chooseIcon({ page, iconNumber }: { page: Page, iconNumber: string }) {
 	const parent = await getParentByTitle({
 		page: page,
 		fieldName: "Icon",
@@ -108,7 +115,7 @@ export async function chooseIcon({ page, iconNumber }) {
  * @param {boolean} props.transparent - Whether to choose a transparent color.
  * @returns {Promise<void>} - A Promise that resolves when the color is chosen.
  */
-export async function chooseColor({ page, label, colorNumber, transparent }) {
+export async function chooseColor({ page, label, colorNumber, transparent }: { page: Page, label: string, colorNumber: number, transparent: boolean }) {
 	const parent = await getParentByTitle({
 		page: page,
 		fieldName: label,
@@ -125,7 +132,7 @@ export async function chooseColor({ page, label, colorNumber, transparent }) {
 			.click();
 	}
 }
-export async function setting_slider({ page, label, slide_value }) {
+export async function setting_slider({ page, label, slide_value }: { page: Page, label: string, slide_value: number }) {
 	const parent = await getParentByTitle({
 		page: page,
 		fieldName: label,
@@ -150,6 +157,10 @@ export async function content_validation_type_text({
 	page,
 	selector,
 	expected_text,
+}: {
+	page: Page,
+	selector: string,
+	expected_text: string
 }) {
 	await expect.soft(page.frameLocator('iFrame').locator(selector)).toContainText(expected_text);
 }

@@ -1,11 +1,13 @@
 import * as contentElements from "./content-elements";
 import * as compose from "./composition-helpers";
+import { Page } from 'playwright';
+
 export async function login_to_site_and_create_page(
-	page,
-	page_name,
-	url,
-	username,
-	password
+	page:Page,
+	page_name:string,
+	url:string,
+	username:string,
+	password:string
 ) {
 	await page.goto(`http://${url}/wp-admin`);
 	await page.getByLabel("Username or Email Address").fill(username);

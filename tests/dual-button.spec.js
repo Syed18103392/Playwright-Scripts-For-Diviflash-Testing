@@ -5,7 +5,7 @@ test("dual-button", async ({ page }) => {
 	await init.login_to_site_and_create_page(
 		page,
 		"test",
-		"play-diviflash.local",
+		"play-diviflash.test",
 		"sajib",
 		"123"
 	);
