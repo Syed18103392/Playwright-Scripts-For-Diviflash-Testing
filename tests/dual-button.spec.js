@@ -2,20 +2,20 @@ import { test, expect } from "@playwright/test";
 import * as init from "./controller";
 
 test("dual-button", async ({ page }) => {
-	await init.login_to_site_and_create_page(
+	await init.loginToSiteAndCreatePage(
 		page,
 		"test",
 		"play-diviflash.test",
 		"sajib",
 		"123"
 	);
-	await init.open_divi_builder(page);
-	await init.insert_module(page, "Dual Button", "difl_dual_button");
-	await init.fill_contents(page);
+	await init.openDiviBuilder(page);
+	await init.insertModule(page, "Dual Button", "difl_dual_button");
+	await init.fillContents(page);
 	await init.addDesign(page);
 	// Save and Exit builder
-	await init.save_and_exit_builder(page);
+	await init.saveAndExitBuilder(page);
 
 	//remove page
-	await init.remove_test_page(page);
+	await init.removeTestPage(page);
 });

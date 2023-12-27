@@ -30,15 +30,15 @@ export async function button({
 	in_the_new_tab: boolean;
 }) {
 	if (click) {
-		await compose.toggle_control({ page: page, control_name: toggle_name });
+		await compose.settingsToggle({ page: page, control_name: toggle_name });
 	}
 	//fill text & Url
-	await compose.fillInputField({ page: page, label: "Text", text: btn_name });
-	await compose.fillInputField({ page: page, label: "URL", text: btn_url });
+	await compose.settingsFillInputField({ page: page, label: "Text", text: btn_name });
+	await compose.settingsFillInputField({ page: page, label: "URL", text: btn_url });
 	//set Link Target
 
 	if (in_the_new_tab) {
-		await compose.selectField({
+		await compose.settingsSelectField({
 			page: page,
 			label: "Link Target",
 			option_name: "In The New Tab",

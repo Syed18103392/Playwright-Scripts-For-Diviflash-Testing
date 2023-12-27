@@ -2,7 +2,7 @@ import * as contentElements from "./content-elements";
 import * as compose from "./composition-helpers";
 import { Page } from 'playwright';
 
-export async function login_to_site_and_create_page(
+export async function loginToSiteAndCreatePage(
 	page: Page,
 	page_name: string,
 	url: string,
@@ -32,7 +32,7 @@ export async function login_to_site_and_create_page(
 		.click();
 	await page.getByLabel("Close panel").click();
 }
-export async function open_divi_builder(page) {
+export async function openDiviBuilder(page) {
 	await page.waitForSelector(".components-snackbar");
 	await page.getByRole("button", { name: "Use Divi Builder" }).click();
 	await page.getByRole("button", { name: "Start Building" }).click();
@@ -40,7 +40,7 @@ export async function open_divi_builder(page) {
 }
 
 //SECTION - Add Content
-export async function fill_contents(page) {
+export async function fillContents(page) {
 	await compose.enableContentTab(page);
 	//add data
 	await contentElements.button({
@@ -53,7 +53,7 @@ export async function fill_contents(page) {
 	});
 
 	//validation
-	await compose.content_validation_type_text({
+	await compose.expectText({
 		page: page,
 		selector: ".df_button_left",
 		expected_text: "First Button",
@@ -68,7 +68,7 @@ export async function fill_contents(page) {
 		in_the_new_tab: true,
 	});
 	//validation
-	await compose.content_validation_type_text({
+	await compose.expectText({
 		page: page,
 		selector: ".df_button_right",
 		expected_text: "Last Button",
@@ -76,52 +76,52 @@ export async function fill_contents(page) {
 
 	//button separator
 	//toggle setting
-	await compose.toggle_control({
+	await compose.settingsToggle({
 		page: page,
 		control_name: "Button Separator",
 	});
 
 	//Turn on button separator
-	await compose.controlSwitch({
+	await compose.settingsSwitch({
 		page: page,
 		label: "Use button separator",
 	});
 	//add separetor text
-	await compose.fillInputField({
+	await compose.settingsFillInputField({
 		page: page,
 		label: "Separator text",
 		text: "Ami separator text",
 	});
 	//validation
-	await compose.content_validation_type_text({
+	await compose.expectText({
 		page: page,
 		selector: ".button-separator",
 		expected_text: "Ami separator text",
 	});
 
 	// Use icon
-	await compose.controlSwitch({
+	await compose.settingsSwitch({
 		page: page,
 		label: "Use Icon",
 	});
 	//choose icon
-	await compose.chooseIcon({
+	await compose.settingsChooseIcon({
 		page: page,
 		iconNumber: "22",
 	});
 	// Choose icon color
-	await compose.chooseColor({
+	await compose.settingsColor({
 		page: page,
 		label: "Icon Color",
 		colorNumber: 3,
 		transparent: true,
 	});
 	//turn on use font size
-	await compose.controlSwitch({
+	await compose.settingsSwitch({
 		page: page,
 		label: "Use Icon Font Size",
 	});
-	await compose.setting_slider({
+	await compose.settingsSlider({
 		page: page,
 		label: "Icon Font Size",
 		slide_value: 10,
@@ -129,21 +129,31 @@ export async function fill_contents(page) {
 }
 //!SECTION
 //SECTION - Add Design
-export async function addDesign(page:Page) {
-	compose.enableDesignTab(page);
+export async function addDesign(page: Page) {
+	await compose.enableDesignTab(page);
+	await compose.settingsToggle({
+		page: page,
+		control_name: 'Button Styles'
+	});
+	await compose.settingsSelectField({
+		page: page,
+		label: "Button Style",
+		option_name: "Vertical"
+	})
+
 }
 
 //!SECTION
-export async function remove_test_page(page) {
+export async function removeTestPage(page) {
 	await page.locator("#wp-admin-bar-edit").click();
 	// await page.waitForSelector("body.wp-admin");
 	await page.getByRole("button", { name: "Move to trash" }).click();
 }
-export async function insert_module(page, module_name, module_selector) {
+export async function insertModule(page, module_name, module_selector) {
 	await page.locator("input#et-fb-filterByTitle").fill(module_name);
 	await page.locator(`li.${module_selector}`).click();
 }
-export async function save_and_exit_builder(page) {
+export async function saveAndExitBuilder(page) {
 	await page.locator("li#wp-admin-bar-et-disable-visual-builder").click();
 	await page.locator(".et_pb_prompt_buttons a:last-child").click();
 }
