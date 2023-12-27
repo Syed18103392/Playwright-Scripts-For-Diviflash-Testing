@@ -78,7 +78,7 @@ export async function fillContents(page) {
 	//toggle setting
 	await compose.settingsToggle({
 		page: page,
-		control_name: "Button Separator",
+		label: "Button Separator",
 	});
 
 	//Turn on button separator
@@ -131,23 +131,77 @@ export async function fillContents(page) {
 //SECTION - Add Design
 export async function addDesign(page: Page) {
 	await compose.enableDesignTab(page);
+
+	//Button Styles
 	await compose.settingsToggle({
 		page: page,
-		control_name: 'Button Styles'
+		label: 'Button Styles'
 	});
 	await compose.settingsSelectField({
 		page: page,
 		label: "Button Style",
 		option_name: "Vertical"
 	})
+	await compose.settingsSelectButton({
+		page: page,
+		label: 'Alignment',
+		select_number: 1,
+	})
+
+	//Left Button Style
+	await compose.settingsToggle({
+		page: page,
+		label: "Left Button Text"
+	})
+	await compose.settingsSelectField({
+		page: page,
+		label: 'Left Button Font',
+		option_name: 'Abel',
+		isItFont: true
+	})
+	await compose.settingsSelectButton({
+		page: page,
+		label: 'Left Button Font Style',
+		select_number: 2,
+		isItFont: true
+	})
+	await compose.settingsSelectButton({
+		page: page,
+		label: 'Left Button Text Alignment',
+		select_number: 2
+	})
+	await compose.settingsColor({
+		page: page,
+		label: 'Left Button Text Color',
+		colorNumber: 3,
+		transparent: false
+	})
+
+	await compose.settingsSlider({
+		page: page,
+		label: 'Left Button Text Size',
+		slide_value: 10
+	})
+	await compose.settingsSlider({
+		page: page,
+		label: 'Left Button Letter Spacing',
+		slide_value: 6
+	})
+	await compose.settingsSlider({
+		page: page,
+		label: 'Left Button Line Height',
+		slide_value: 2
+	})
 
 }
 
 //!SECTION
 export async function removeTestPage(page) {
-	await page.locator("#wp-admin-bar-edit").click();
-	// await page.waitForSelector("body.wp-admin");
-	await page.getByRole("button", { name: "Move to trash" }).click();
+
+	await page.click("#wp-admin-bar-edit");
+	await page.click('button[aria-label="Move to trash"]');
+	await page.waitForLoadState('load');
+	console.log('Delete Complete');
 }
 export async function insertModule(page, module_name, module_selector) {
 	await page.locator("input#et-fb-filterByTitle").fill(module_name);

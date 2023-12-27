@@ -15,7 +15,6 @@ test("dual-button", async ({ page }) => {
 	await init.addDesign(page);
 	// Save and Exit builder
 	await init.saveAndExitBuilder(page);
-
-	//remove page
 	await init.removeTestPage(page);
+	//remove page
 });

@@ -1,17 +1,29 @@
-//SECTION - Helping Hand
-
 import { expect } from "@playwright/test";
-import { Page } from "playwright"
+import { Page } from "playwright";
 
-
-
-
+//SECTION - Helping Hand
+/**
+ * Enable the Content tab on a page.
+ *
+ * @param {Object} props - The props for the function.
+ * @param {Page} props.page - The page object.
+ * @returns {Promise<void>} A promise that resolves when the Content tab is enabled.
+ */
 export async function enableContentTab(page: Page) {
 	await page.locator(".et-fb-tabs__item.et-fb-tabs__item--general").click();
 }
+
+/**
+ * Enable the Design tab on a page.
+ *
+ * @param {Object} props - The props for the function.
+ * @param {Page} props.page - The page object.
+ * @returns {Promise<void>} A promise that resolves when the Design tab is enabled.
+ */
 export async function enableDesignTab(page: Page) {
 	await page.locator(".et-fb-tabs__item.et-fb-tabs__item--advanced").click();
 }
+//!SECTION
 
 /**
  * Get the parent element by its title and a specific field name.
@@ -23,29 +35,31 @@ export async function enableDesignTab(page: Page) {
  */
 async function getParentByTitle({
 	page,
-	fieldName
+	fieldName,
+	isItFont = false,
 }: {
 	page: Page,
-	fieldName: string
+	fieldName: string,
+	isItFont?: boolean
 }) {
+	console.log(isItFont)
 	const child = await page.getByText(fieldName, { exact: true });
 	const parent = await page
-		.locator(".et-fb-form__group")
+		.locator((isItFont) ? ".et-fb-font-option-container-with-label" : ".et-fb-form__group")
 		.filter({ has: child });
 	return await parent;
 }
-//!SECTION
 
 /**
  * Toggle a control element on a page by clicking on it.
  *
  * @param {Object} props - The props for the function.
  * @param {Page} props.page - The page object containing the control element.
- * @param {string} props.control_name - The name of the control element to toggle.
+ * @param {string} props.label - The name of the control element to toggle.
  * @returns {Promise<void>} A promise that resolves when the control is toggled.
  */
-export async function settingsToggle({ page, control_name }: { page: Page, control_name: string }) {
-	await page.getByText(control_name, { exact: true }).click();
+export async function settingsToggle({ page, label }: { page: Page, label: string }) {
+	await page.getByText(label, { exact: true }).click();
 }
 
 /**
@@ -74,10 +88,11 @@ export async function settingsFillInputField({ page, label, text }: { page: Page
  * @param {string} props.option_name - The name of the option to select.
  * @returns {Promise<void>} A promise that resolves when the option is selected.
  */
-export async function settingsSelectField({ page, label, option_name }: { page: Page, label: string, option_name: string }): Promise<void> {
+export async function settingsSelectField({ page, label, option_name, isItFont = false }: { page: Page, label: string, option_name: string, isItFont?: boolean }): Promise<void> {
 	const parent = await getParentByTitle({
 		page: page,
 		fieldName: label,
+		isItFont: isItFont
 	});
 	await parent.locator(".et-fb-settings-option-select-advanced").click();
 	await page.getByText(option_name, { exact: true }).click();
@@ -142,6 +157,16 @@ export async function settingsColor({ page, label, colorNumber, transparent }: {
 			.click();
 	}
 }
+
+/**
+ * Adjust the value of a slider associated with a specified label.
+ *
+ * @param {Object} props - The parameters for the function.
+ * @param {Page} props.page - The Playwright page object.
+ * @param {string} props.label - The label associated with the slider.
+ * @param {number} props.slide_value - The value to set on the slider.
+ * @returns {Promise<void>} - A Promise that resolves when the slider value is adjusted.
+ */
 export async function settingsSlider({ page, label, slide_value }: { page: Page, label: string, slide_value: number }) {
 	const parent = await getParentByTitle({
 		page: page,
@@ -149,20 +174,47 @@ export async function settingsSlider({ page, label, slide_value }: { page: Page,
 	});
 	await parent.locator("input.et-fb-settings-option-input").click();
 
-	// Press the "Up" key 10 times
+	// Press the "Up" key 'slide_value' times
 	for (let i = 0; i < slide_value; i++) {
 		await page.keyboard.press("ArrowUp");
 	}
 }
-// async function upload_image(page) {
-// 	await page.locator(".et-fb-item-addable-button").click();
-// 	await page.waitForSelector("#menu-item-browse");
-// 	await page.locator("#menu-item-browse").click();
-// 	await page.locator("ul.attachments li:first-child").click();
-// 	await page.locator("button.media-button-insert").click();
-// }
+
+/**
+ * Select a style like 'Alignment/ Font Style' from a list associated with a specified label on a page.
+ *
+ * @param {Object} props - The parameters for the function.
+ * @param {Page} props.page - The Playwright page object.
+ * @param {string} props.label - The label associated with the button list.
+ * @param {number} props.select_number - The number of the style [for example first button[align-left] = 0].
+ * @returns {Promise<void>} - A Promise that resolves when the button is selected.
+ */
+export async function settingsSelectButton({ page, label, select_number, isItFont = false }: {
+	page: Page,
+	label: string,
+	select_number: number,
+	isItFont?: boolean,
+}) {
+	const parent = await getParentByTitle({
+		page: page,
+		fieldName: label,
+		isItFont: isItFont
+	})
+	await parent.locator('button').nth(select_number).click();
+}
+
+
 //SECTION - Validation Section
 //FIXME -
+/**
+ * Assert that a specific text is present in the specified selector.
+ *
+ * @param {Object} props - The parameters for the function.
+ * @param {Page} props.page - The Playwright page object.
+ * @param {string} props.selector - The selector to check for text.
+ * @param {string} props.expected_text - The expected text.
+ * @returns {Promise<void>} - A Promise that resolves when the text assertion is complete.
+ */
 export async function expectText({
 	page,
 	selector,

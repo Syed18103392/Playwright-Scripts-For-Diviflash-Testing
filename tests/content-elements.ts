@@ -30,7 +30,7 @@ export async function button({
 	in_the_new_tab: boolean;
 }) {
 	if (click) {
-		await compose.settingsToggle({ page: page, control_name: toggle_name });
+		await compose.settingsToggle({ page: page, label: toggle_name });
 	}
 	//fill text & Url
 	await compose.settingsFillInputField({ page: page, label: "Text", text: btn_name });
