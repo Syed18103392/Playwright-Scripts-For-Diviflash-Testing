@@ -1,4 +1,4 @@
-import * as contentElements from "./content-elements";
+import * as components from "./component-elements";
 import * as compose from "./composition-helpers";
 import { Page } from 'playwright';
 
@@ -43,7 +43,7 @@ export async function openDiviBuilder(page) {
 export async function fillContents(page) {
 	await compose.enableContentTab(page);
 	//add data
-	await contentElements.button({
+	await components.button({
 		page: page,
 		toggle_name: "Left button",
 		click: false,
@@ -59,7 +59,7 @@ export async function fillContents(page) {
 		expected_text: "First Button",
 	});
 	//add button data
-	await contentElements.button({
+	await components.button({
 		page: page,
 		toggle_name: "Right Button",
 		click: true,
@@ -137,16 +137,9 @@ export async function addDesign(page: Page) {
 		page: page,
 		label: 'Button Styles'
 	});
-	await compose.settingsSelectField({
-		page: page,
-		label: "Button Style",
-		option_name: "Vertical"
-	})
-	await compose.settingsSelectButton({
-		page: page,
-		label: 'Alignment',
-		select_number: 1,
-	})
+	//FIXME - fix validation
+	await components.buttonStyles(page);
+
 
 	//Left Button Style
 	await compose.settingsToggle({
@@ -191,6 +184,12 @@ export async function addDesign(page: Page) {
 		page: page,
 		label: 'Left Button Line Height',
 		slide_value: 2
+	})
+	await compose.settingsSelectButton({
+		page: page,
+		label: 'Left Button Text Shadow',
+		select_number: 2,
+		isItAnchor: true,
 	})
 
 }

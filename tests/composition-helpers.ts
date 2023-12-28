@@ -42,7 +42,6 @@ async function getParentByTitle({
 	fieldName: string,
 	isItFont?: boolean
 }) {
-	console.log(isItFont)
 	const child = await page.getByText(fieldName, { exact: true });
 	const parent = await page
 		.locator((isItFont) ? ".et-fb-font-option-container-with-label" : ".et-fb-form__group")
@@ -189,18 +188,19 @@ export async function settingsSlider({ page, label, slide_value }: { page: Page,
  * @param {number} props.select_number - The number of the style [for example first button[align-left] = 0].
  * @returns {Promise<void>} - A Promise that resolves when the button is selected.
  */
-export async function settingsSelectButton({ page, label, select_number, isItFont = false }: {
+export async function settingsSelectButton({ page, label, select_number, isItFont = false, isItAnchor = false }: {
 	page: Page,
 	label: string,
 	select_number: number,
 	isItFont?: boolean,
+	isItAnchor?: boolean,
 }) {
 	const parent = await getParentByTitle({
 		page: page,
 		fieldName: label,
 		isItFont: isItFont
 	})
-	await parent.locator('button').nth(select_number).click();
+	await parent.locator(isItAnchor ? 'a' : 'button').nth(select_number).click();
 }
 
 
@@ -224,6 +224,21 @@ export async function expectText({
 	selector: string,
 	expected_text: string
 }) {
-	await expect.soft(page.frameLocator('iFrame').locator(selector)).toContainText(expected_text);
+	await expect.soft(await page.frameLocator('iFrame').locator(selector)).toContainText(expected_text);
+}
+
+export async function expectStyleValue({
+	page,
+	selector,
+	style_name,
+	expected_value
+}: {
+	page: Page,
+	selector: string,
+	style_name: string,
+	expected_value: string,
+}) {
+	await expect.soft(await page.frameLocator('iFrame').locator(selector)).toHaveCSS(style_name, expected_value);
+	console.log(await expect.soft(await page.frameLocator('iFrame').locator(selector)).toHaveCSS(style_name, expected_value));
 }
 //!SECTION
