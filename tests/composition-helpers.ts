@@ -145,14 +145,10 @@ export async function settingsColor({
 	page,
 	label,
 	colorNumber,
-	transparent,
-	gradient = false,
 }: {
 	page: Page,
 	label: string,
 	colorNumber: number,
-	transparent: boolean,
-	gradient?: boolean
 }) {
 	const parent = await getParentByTitle({
 		page: page,
@@ -164,12 +160,32 @@ export async function settingsColor({
 		.locator(".et-fb-settings-color-manager__swatches-swatch")
 		.nth(1)
 		.click();
-	if (transparent) {
-		await parent
-			.locator(".et-fb-settings-color-manager__reset-color")
-			.click();
-	}
 }
+export async function settingsColor__Transparent({
+	page,
+	label,
+}: {
+	page: Page,
+	label: string,
+}) {
+	const parent = await getParentByTitle({
+		page: page,
+		fieldName: label,
+	});
+	await parent.locator(".et-fb-settings-color-manager__reset-color").click();
+}
+export async function settingsColor__Gradient({
+	page,
+}: {
+	page: Page,
+}) {
+	await page.locator('.et-fb-icon--background-gradient').click();
+	await settingsSwitch({
+		page: page,
+		label: 'Use gradient background'
+	});
+}
+
 /**
  * Adjust the value of a slider associated with a specified label.
  *

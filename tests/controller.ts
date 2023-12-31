@@ -112,7 +112,6 @@ export async function fillContents(page) {
 		page: page,
 		label: "Icon Color",
 		colorNumber: 3,
-		transparent: true,
 	});
 	//turn on use font size
 	await compose.settingsSwitch({
@@ -137,7 +136,7 @@ export async function addDesign(page: Page) {
 	});
 	await components.buttonStyles(page);
 	await components.buttonText({ page: page, button_name: "Left" });
-
+	await components.buttonStyle({ page: page, button_name: 'Left' });
 	await components.buttonText({ page: page, button_name: "Right" });
 }
 

@@ -154,8 +154,11 @@ export async function buttonText({
 		page: page,
 		label: `${button_name} Button Text Color`,
 		colorNumber: 3,
-		transparent: false,
 	});
+	await compose.settingsColor__Transparent({
+		page: page,
+		label: `${button_name} Button Text Color`
+	})
 
 	await compose.settingsSlider({
 		page: page,
@@ -180,5 +183,21 @@ export async function buttonText({
 	});
 }
 export async function buttonStyle({ page, button_name }: { page: Page, button_name: string }) {
+	await compose.settingsToggle({
+		page: page,
+		label: `${button_name} Button Style`
+	})
+	//FIXME -  This is not working for backgound 
+	// await compose.settingsColor__Transparent({
+	// 	page: page,
+	// 	label: 'Backgound Color'
+	// });
+	await compose.settingsColor({
+		page: page,
+		label: 'Background Color',
+		colorNumber: 3,
+	})
+
+	await compose.settingsColor__Gradient({ page: page });
 
 }
