@@ -1,13 +1,13 @@
 import * as components from "./component-elements";
 import * as compose from "./composition-helpers";
-import { Page } from 'playwright';
+import { Page } from "playwright";
 
 export async function loginToSiteAndCreatePage(
 	page: Page,
 	page_name: string,
 	url: string,
 	username: string,
-	password: string
+	password: string,
 ) {
 	await page.goto(`http://${url}/wp-admin`);
 	await page.getByLabel("Username or Email Address").fill(username);
@@ -21,14 +21,12 @@ export async function loginToSiteAndCreatePage(
 		.click();
 	await page.getByLabel("Add title").fill(page_name);
 	await page
-		.locator(
-			".edit-post-header__settings .editor-post-publish-button__button"
-		)
-		.filter({ hasText: "Publish", exact: true })
+		.locator(".edit-post-header__settings .editor-post-publish-button__button")
+		.filter({ hasText: "Publish" })
 		.click();
 	await page
 		.locator(".editor-post-publish-panel__header-publish-button button")
-		.filter({ hasText: "Publish", exact: true })
+		.filter({ hasText: "Publish" })
 		.click();
 	await page.getByLabel("Close panel").click();
 }
@@ -49,7 +47,7 @@ export async function fillContents(page) {
 		click: false,
 		btn_name: "First Button",
 		btn_url: "google.com",
-		in_the_new_tab: false
+		in_the_new_tab: false,
 	});
 
 	//validation
@@ -135,72 +133,20 @@ export async function addDesign(page: Page) {
 	//Button Styles
 	await compose.settingsToggle({
 		page: page,
-		label: 'Button Styles'
+		label: "Button Styles",
 	});
-	//FIXME - fix validation
 	await components.buttonStyles(page);
+	await components.buttonText({ page: page, button_name: "Left" });
 
-
-	//Left Button Style
-	await compose.settingsToggle({
-		page: page,
-		label: "Left Button Text"
-	})
-	await compose.settingsSelectField({
-		page: page,
-		label: 'Left Button Font',
-		option_name: 'Abel',
-		isItFont: true
-	})
-	await compose.settingsSelectButton({
-		page: page,
-		label: 'Left Button Font Style',
-		select_number: 2,
-		isItFont: true
-	})
-	await compose.settingsSelectButton({
-		page: page,
-		label: 'Left Button Text Alignment',
-		select_number: 2
-	})
-	await compose.settingsColor({
-		page: page,
-		label: 'Left Button Text Color',
-		colorNumber: 3,
-		transparent: false
-	})
-
-	await compose.settingsSlider({
-		page: page,
-		label: 'Left Button Text Size',
-		slide_value: 10
-	})
-	await compose.settingsSlider({
-		page: page,
-		label: 'Left Button Letter Spacing',
-		slide_value: 6
-	})
-	await compose.settingsSlider({
-		page: page,
-		label: 'Left Button Line Height',
-		slide_value: 2
-	})
-	await compose.settingsSelectButton({
-		page: page,
-		label: 'Left Button Text Shadow',
-		select_number: 2,
-		isItAnchor: true,
-	})
-
+	await components.buttonText({ page: page, button_name: "Right" });
 }
 
 //!SECTION
 export async function removeTestPage(page) {
-
 	await page.click("#wp-admin-bar-edit");
 	await page.click('button[aria-label="Move to trash"]');
-	await page.waitForLoadState('load');
-	console.log('Delete Complete');
+	await page.waitForLoadState("load");
+	console.log("Delete Complete");
 }
 export async function insertModule(page, module_name, module_selector) {
 	await page.locator("input#et-fb-filterByTitle").fill(module_name);

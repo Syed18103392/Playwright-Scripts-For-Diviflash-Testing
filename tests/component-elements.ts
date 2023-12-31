@@ -1,6 +1,5 @@
 import * as compose from "./composition-helpers";
-import { Page } from 'playwright';
-
+import { Page } from "playwright";
 
 /**
  * Perform some action on button.
@@ -33,8 +32,16 @@ export async function button({
 		await compose.settingsToggle({ page: page, label: toggle_name });
 	}
 	//fill text & Url
-	await compose.settingsFillInputField({ page: page, label: "Text", text: btn_name });
-	await compose.settingsFillInputField({ page: page, label: "URL", text: btn_url });
+	await compose.settingsFillInputField({
+		page: page,
+		label: "Text",
+		text: btn_name,
+	});
+	await compose.settingsFillInputField({
+		page: page,
+		label: "URL",
+		text: btn_url,
+	});
 	//set Link Target
 
 	if (in_the_new_tab) {
@@ -47,71 +54,131 @@ export async function button({
 }
 
 export async function buttonStyles(page: Page) {
-	// Button Style 
+	// Button Style
 	//--Vertical
 	await compose.settingsSelectField({
 		page: page,
 		label: "Button Style",
-		option_name: 'Vertical'
+		option_name: "Vertical",
 	});
 	await compose.expectStyleValue({
 		page: page,
-		selector: '.df_button_container',
-		style_name: 'flex-direction',
-		expected_value: 'column'
-	})
+		selector: ".df_button_container",
+		style_name: "flex-direction",
+		expected_value: "column",
+	});
 
 	//--Horizontal
 	await compose.settingsSelectField({
 		page: page,
 		label: "Button Style",
-		option_name: 'Horizontal'
+		option_name: "Horizontal",
 	});
 	await compose.expectStyleValue({
 		page: page,
-		selector: '.df_button_container',
-		style_name: 'flex-direction',
-		expected_value: 'row'
-	})
+		selector: ".df_button_container",
+		style_name: "flex-direction",
+		expected_value: "row",
+	});
 
 	// Alignment
 
 	//--Left
 	await compose.settingsSelectButton({
 		page: page,
-		label: 'Alignment',
+		label: "Alignment",
 		select_number: 0,
-	})
+	});
 	await compose.expectStyleValue({
 		page: page,
-		selector: '.df_button_container',
-		style_name: 'justify-content',
-		expected_value: 'flex-start'
-	})
+		selector: ".df_button_container",
+		style_name: "justify-content",
+		expected_value: "flex-start",
+	});
 	//--center
 	await compose.settingsSelectButton({
 		page: page,
-		label: 'Alignment',
+		label: "Alignment",
 		select_number: 1,
-	})
+	});
 	await compose.expectStyleValue({
 		page: page,
-		selector: '.df_button_container',
-		style_name: 'justify-content',
-		expected_value: 'center'
-	})
+		selector: ".df_button_container",
+		style_name: "justify-content",
+		expected_value: "center",
+	});
 	//--right
 	await compose.settingsSelectButton({
 		page: page,
-		label: 'Alignment',
+		label: "Alignment",
 		select_number: 2,
-	})
+	});
 	await compose.expectStyleValue({
 		page: page,
-		selector: '.df_button_container',
-		style_name: 'justify-content',
-		expected_value: 'flex-end'
-	})
+		selector: ".df_button_container",
+		style_name: "justify-content",
+		expected_value: "flex-end",
+	});
+}
 
+export async function buttonText({
+	page,
+	button_name,
+}: {
+	page: Page;
+	button_name: string;
+}) {
+	//Left Button Style
+	await compose.settingsToggle({
+		page: page,
+		label: `${button_name} Button Text`,
+	});
+	await compose.settingsSelectField({
+		page: page,
+		label: `${button_name} Button Font`,
+		option_name: "Abel",
+		isItFont: true,
+	});
+	await compose.settingsSelectButton({
+		page: page,
+		label: `${button_name} Button Font Style`,
+		select_number: 2,
+		isItFont: true,
+	});
+	await compose.settingsSelectButton({
+		page: page,
+		label: `${button_name} Button Text Alignment`,
+		select_number: 2,
+	});
+	await compose.settingsColor({
+		page: page,
+		label: `${button_name} Button Text Color`,
+		colorNumber: 3,
+		transparent: false,
+	});
+
+	await compose.settingsSlider({
+		page: page,
+		label: `${button_name} Button Text Size`,
+		slide_value: 10,
+	});
+	await compose.settingsSlider({
+		page: page,
+		label: `${button_name} Button Letter Spacing`,
+		slide_value: 6,
+	});
+	await compose.settingsSlider({
+		page: page,
+		label: `${button_name} Button Line Height`,
+		slide_value: 2,
+	});
+	await compose.settingsSelectButton({
+		page: page,
+		label: `${button_name} Button Text Shadow`,
+		select_number: 2,
+		isItAnchor: true,
+	});
+}
+export async function buttonStyle({ page, button_name }: { page: Page, button_name: string }) {
 
 }

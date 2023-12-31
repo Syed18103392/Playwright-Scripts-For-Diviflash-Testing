@@ -139,7 +139,21 @@ export async function settingsChooseIcon({ page, iconNumber }: { page: Page, ico
  * @param {boolean} props.transparent - Whether to choose a transparent color.
  * @returns {Promise<void>} - A Promise that resolves when the color is chosen.
  */
-export async function settingsColor({ page, label, colorNumber, transparent }: { page: Page, label: string, colorNumber: number, transparent: boolean }) {
+
+//TODO - Working in it [ADDING GRADIENT OPTION]
+export async function settingsColor({
+	page,
+	label,
+	colorNumber,
+	transparent,
+	gradient = false,
+}: {
+	page: Page,
+	label: string,
+	colorNumber: number,
+	transparent: boolean,
+	gradient?: boolean
+}) {
 	const parent = await getParentByTitle({
 		page: page,
 		fieldName: label,
@@ -156,7 +170,6 @@ export async function settingsColor({ page, label, colorNumber, transparent }: {
 			.click();
 	}
 }
-
 /**
  * Adjust the value of a slider associated with a specified label.
  *
@@ -205,7 +218,6 @@ export async function settingsSelectButton({ page, label, select_number, isItFon
 
 
 //SECTION - Validation Section
-//FIXME -
 /**
  * Assert that a specific text is present in the specified selector.
  *
@@ -239,6 +251,5 @@ export async function expectStyleValue({
 	expected_value: string,
 }) {
 	await expect.soft(await page.frameLocator('iFrame').locator(selector)).toHaveCSS(style_name, expected_value);
-	console.log(await expect.soft(await page.frameLocator('iFrame').locator(selector)).toHaveCSS(style_name, expected_value));
 }
 //!SECTION
