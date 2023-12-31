@@ -85,7 +85,7 @@ export async function buttonStyles(page: Page) {
 	await compose.expectStyleValue({
 		page: page,
 		selector: '.df_button_container',
-		style_name: 'align-items',
+		style_name: 'justify-content',
 		expected_value: 'flex-start'
 	})
 	//--center
@@ -97,7 +97,7 @@ export async function buttonStyles(page: Page) {
 	await compose.expectStyleValue({
 		page: page,
 		selector: '.df_button_container',
-		style_name: 'align-items',
+		style_name: 'justify-content',
 		expected_value: 'center'
 	})
 	//--right
@@ -109,7 +109,7 @@ export async function buttonStyles(page: Page) {
 	await compose.expectStyleValue({
 		page: page,
 		selector: '.df_button_container',
-		style_name: 'align-items',
+		style_name: 'justify-content',
 		expected_value: 'flex-end'
 	})
 
