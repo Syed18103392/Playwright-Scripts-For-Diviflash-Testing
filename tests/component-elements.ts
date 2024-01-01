@@ -1,3 +1,4 @@
+import { expect } from "@playwright/test";
 import * as compose from "./composition-helpers";
 import { Page } from "playwright";
 
@@ -128,7 +129,6 @@ export async function buttonText({
 	page: Page;
 	button_name: string;
 }) {
-	//Left Button Style
 	await compose.settingsToggle({
 		page: page,
 		label: `${button_name} Button Text`,
@@ -197,7 +197,25 @@ export async function buttonStyle({ page, button_name }: { page: Page, button_na
 		label: 'Background Color',
 		colorNumber: 3,
 	})
-
+	await compose.expectStyleValue({
+		page: page,
+		selector: `.df_button_${button_name.toLocaleLowerCase()}`,
+		style_name: 'background-color',
+		expected_value: 'rgb(224, 43, 32)' //#E02B20
+	})
 	await compose.settingsColor__Gradient({ page: page });
 
+	await compose.expectStyleValue({
+		page: page,
+		selector: `.df_button_${button_name.toLocaleLowerCase()}`,
+		style_name: 'background-image',
+		expected_value: 'linear-gradient(rgb(43, 135, 218) 0%, rgb(41, 196, 169) 100%)' //linear-gradient( 180deg, #2b87da 0%, #29c4a9 100% )
+	})
+	await compose.settingsColor__Image({ page: page });
+	await compose.expectStyleValue({
+		page: page,
+		selector: `.df_button_${button_name.toLocaleLowerCase()}`,
+		style_name: 'background-image',
+		expected_value: 'url(\"http://play-diviflash.test/wp-content/uploads/2024/01/LucyLaunchB_Kraus_2048.jpg\"), linear-gradient(rgb(43, 135, 218) 0%, rgb(41, 196, 169) 100%)' //linear-gradient( 180deg, #2b87da 0%, #29c4a9 100% )
+	})
 }

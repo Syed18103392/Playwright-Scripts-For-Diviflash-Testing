@@ -140,7 +140,7 @@ export async function settingsChooseIcon({ page, iconNumber }: { page: Page, ico
  * @returns {Promise<void>} - A Promise that resolves when the color is chosen.
  */
 
-//TODO - Working in it [ADDING GRADIENT OPTION]
+
 export async function settingsColor({
 	page,
 	label,
@@ -184,6 +184,19 @@ export async function settingsColor__Gradient({
 		page: page,
 		label: 'Use gradient background'
 	});
+}
+
+
+export async function settingsColor__Image({
+	page,
+}: {
+	page: Page,
+}) {
+	await page.locator('.et-fb-icon--background-image').click();
+	await page.locator('.et-fb-settings-option-upload-type-image').click();
+	await page.locator('#menu-item-browse').click();
+	await page.locator('li.attachment').nth(1).click();
+	await page.locator('.media-button-insert').click();
 }
 
 /**
