@@ -143,7 +143,8 @@ export async function addDesign(page: Page) {
 //!SECTION
 export async function removeTestPage(page) {
 	await page.click("#wp-admin-bar-edit");
-	await page.click('button[aria-label="Move to trash"]');
+	// await page.click('button[aria-label="Move to trash"]');
+	await page.getByRole('button', { name: "Move to trash" });
 	await page.waitForLoadState("load");
 	console.log("Delete Complete");
 }

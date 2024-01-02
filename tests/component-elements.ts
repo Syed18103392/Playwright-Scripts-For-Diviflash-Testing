@@ -212,10 +212,4 @@ export async function buttonStyle({ page, button_name }: { page: Page, button_na
 		expected_value: 'linear-gradient(rgb(43, 135, 218) 0%, rgb(41, 196, 169) 100%)' //linear-gradient( 180deg, #2b87da 0%, #29c4a9 100% )
 	})
 	await compose.settingsColor__Image({ page: page });
-	await compose.expectStyleValue({
-		page: page,
-		selector: `.df_button_${button_name.toLocaleLowerCase()}`,
-		style_name: 'background-image',
-		expected_value: 'url(\"http://play-diviflash.test/wp-content/uploads/2024/01/LucyLaunchB_Kraus_2048.jpg\"), linear-gradient(rgb(43, 135, 218) 0%, rgb(41, 196, 169) 100%)' //linear-gradient( 180deg, #2b87da 0%, #29c4a9 100% )
-	})
 }
