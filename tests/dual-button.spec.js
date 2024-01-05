@@ -1,20 +1,21 @@
 import { test, expect } from "@playwright/test";
-import * as init from "./controller";
+import * as init from "./includes/components/duelButton/controller";
+import * as global from './includes/global.ts'
 
-test("dual-button", async ({ page }) => {
-	await init.loginToSiteAndCreatePage(
+test("test-dual-button", async ({ page }) => {
+	await global.loginToSiteAndCreatePage(
 		page,
 		"test",
 		"play-diviflash.local",
 		"sajib",
 		"123"
 	);
-	await init.openDiviBuilder(page);
-	await init.insertModule(page, "Dual Button", "difl_dual_button");
+	await global.openDiviBuilder(page);
+	await global.insertModule(page, "Dual Button", "difl_dual_button");
 	await init.fillContents(page);
 	await init.addDesign(page);
 	// Save and Exit builder
-	await init.saveAndExitBuilder(page);
-	await init.removeTestPage(page);
+	await global.saveAndExitBuilder(page);
+	await global.removeTestPage(page);
 	//remove page
 });
