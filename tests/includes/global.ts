@@ -1,8 +1,8 @@
+import { expect } from "@playwright/test";
 import { Page } from "playwright";
 
-export async function loginToSiteAndCreatePage(
+export async function loginToSite(
         page: Page,
-        page_name: string,
         url: string,
         username: string,
         password: string,
@@ -12,6 +12,14 @@ export async function loginToSiteAndCreatePage(
         await page.getByLabel("Password", { exact: true }).click();
         await page.getByLabel("Password", { exact: true }).fill(password);
         await page.getByRole("button", { name: "Log In" }).click();
+}
+export async function createPage({
+        page,
+        page_name
+}: {
+        page: Page,
+        page_name: string
+}) {
         await page.getByRole("link", { name: "Pages", exact: true }).click();
         await page
                 .locator("#wpbody-content")
@@ -27,6 +35,35 @@ export async function loginToSiteAndCreatePage(
                 .filter({ hasText: "Publish" })
                 .click();
         await page.getByLabel("Close panel").click();
+}
+export async function installPlugin(page, wordpressURL, pluginFilePath) {
+        await page.goto(`${wordpressURL}/wp-admin/plugins.php`);
+
+        const dfPluginStatus = await page.$('a[aria-label="Deactivate DiviFlash"]');
+        const isPluginActivated = dfPluginStatus !== null;
+        await page.click('a.page-title-action');
+
+        await page.getByRole("button", { name: "Upload Plugin", exact: true }).click();
+        const fileInput = await page.$('input[type="file"]');
+        await fileInput.setInputFiles(pluginFilePath);
+        await page.click('input#install-plugin-submit');
+
+        if (isPluginActivated) {
+                console.trace(`Plugin Status: ${isPluginActivated}`);
+                await page.screenshot({ path: 'snapshots/pluginActivatePanel.png' });
+                expect(page.locator('.button').filter({ hasText: 'Replace current with uploaded' })).toBeVisible();
+                await page.locator('.button').filter({ hasText: 'Replace current with uploaded' }).click();
+        }
+        else {
+                console.log('not replace');
+                await page.screenshot({ path: 'snapshots/pluginActivatePanel.png' });
+                expect(page.locator('.button').filter({ hasText: 'Activate Plugin' })).toBeVisible();
+
+                await page.locator('.button').filter({ hasText: 'Activate Plugin' }).click();
+        }
+        await page.goto(`${wordpressURL}/wp-admin/plugins.php`);
+        await page.screenshot({ path: 'snapshots/pluginPage.png' });
+        await expect(await page.getByLabel('Deactivate DiviFlash')).toBeVisible();
 }
 export async function openDiviBuilder(page) {
         await page.waitForSelector(".components-snackbar");

@@ -247,6 +247,12 @@ export async function settingsSelectButton({ page, label, select_number, isItFon
 	await parent.locator(isItAnchor ? 'a' : 'button').nth(select_number).click();
 }
 
+export async function settingsAddNewChildItem({ page, tooltip_name }: {
+	page: Page,
+	tooltip_name: string,
+}) {
+	await page.locator(`button[data-tip='${tooltip_name}']`).click();
+}
 
 //SECTION - Validation Section
 /**
