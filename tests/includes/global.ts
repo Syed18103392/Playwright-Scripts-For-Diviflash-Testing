@@ -7,7 +7,7 @@ export async function loginToSite(
         username: string,
         password: string,
 ) {
-        await page.goto(`http://${url}/wp-admin`);
+        await page.goto(`${url}/wp-admin`);
         await page.getByLabel("Username or Email Address").fill(username);
         await page.getByLabel("Password", { exact: true }).click();
         await page.getByLabel("Password", { exact: true }).fill(password);
@@ -49,7 +49,7 @@ export async function installPlugin(page, wordpressURL, pluginFilePath) {
         await page.click('input#install-plugin-submit');
 
         if (isPluginActivated) {
-                console.trace(`Plugin Status: ${isPluginActivated}`);
+                // console.trace(`Plugin Status: ${isPluginActivated}`);
                 await page.screenshot({ path: 'snapshots/pluginActivatePanel.png' });
                 expect(page.locator('.button').filter({ hasText: 'Replace current with uploaded' })).toBeVisible();
                 await page.locator('.button').filter({ hasText: 'Replace current with uploaded' }).click();
