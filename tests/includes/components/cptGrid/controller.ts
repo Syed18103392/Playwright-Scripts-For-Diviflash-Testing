@@ -27,11 +27,11 @@ export async function addContent(page) {
                 label: 'Type',
                 option_name: 'Image',
         })
-        // await page.screenshot({ path: 'snapshots/imageVisiblity.png' });
-        // await compose.expectImageVisiblity({
-        //         page:page,
-        //         selector:'article:nth-child(1) a img'
-        // })
+        await page.screenshot({ path: 'snapshots/imageVisiblity.png' });
+        await compose.expectImageVisiblity({
+                page:page,
+                selector:'article:nth-child(1) a img'
+        })
 
         console.log(`🔥 Select image: and check visiblity  ✅`)
         // await compose.settingsSelectField({
