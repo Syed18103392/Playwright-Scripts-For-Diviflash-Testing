@@ -86,3 +86,5 @@ export async function saveAndExitBuilder(page) {
         await page.locator("li#wp-admin-bar-et-disable-visual-builder").click();
         await page.locator(".et_pb_prompt_buttons a:last-child").click();
 }
+
+

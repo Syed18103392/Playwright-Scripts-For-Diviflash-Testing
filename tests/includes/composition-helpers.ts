@@ -290,3 +290,15 @@ export async function expectStyleValue({
 	await expect.soft(await page.frameLocator('iFrame').locator(selector)).toHaveCSS(style_name, expected_value);
 }
 //!SECTION
+
+export async function expectImageVisiblity({
+	page,
+	selector,
+}: {
+	page: Page,
+	selector: string
+}) {
+	await page.on('request', request => console.log(`Request sent: ${request.url()}`));
+	expect.soft(await page.frameLocator('iFrame').locator(selector)).toBeVisible();
+}
+
