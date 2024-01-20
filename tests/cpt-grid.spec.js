@@ -2,6 +2,9 @@
 import { test, expect } from "@playwright/test";
 import * as init from "./includes/components/cptGrid/controller"; // add content \\ add design
 import * as global from './includes/global.ts' //global jobs : login,create page, save exit, 
+import { Global } from './includes/global-fixures.ts';
+
+
 
 const credential = {
         // latest_plugin_file_path: '/Users/syedsajib/Downloads/Office/checking /production/marketplace/diviflash.zip',
@@ -19,32 +22,33 @@ const credential = {
 
 
 test("test-cpt-grid", async ({ page }) => {
+        const global_fixture = new Global(page);
+
         console.group();
-        await global.loginToSite(
-                page,
+        await global_fixture.loginToSite(
                 credential.wordpressURL,
                 credential.login_username,
                 credential.login_password
         );
         console.log(`🔥 Login To Site .. finised 🔥`);
-        await global.createPage({
-                page: page,
+        await global_fixture.createPage({
                 page_name: credential.testing_page_name
         })
+
         if (credential.latest_plugin_file_path) {
                 console.log(`🔥 Installing Latest Diviflash 🔥`);
-                await global.installPlugin(
-                        page, credential.wordpressURL, credential.latest_plugin_file_path
+                await global_fixture.installPlugin(
+                        credential.wordpressURL, credential.latest_plugin_file_path
                 )
                 console.log(`🔥 Diviflash Installed 🔥`);
         }
 
         console.log(`🔥 Start opening Divi Builder 🔥`);
-        await global.openDiviBuilder(page);
+        await global_fixture.openDiviBuilder();
         console.log(`🔥 Ending opening Divi Builder 🔥`);
 
         console.log(`🔥 Start Module Inserting 🔥`);
-        await global.insertModule(page, credential.module_name, `difl_${credential.module_id()}`);
+        await global_fixture.insertModule( credential.module_name, `difl_${credential.module_id()}`);
         console.log(`🔥 Module Inserting Done 🔥`);
 
         console.log(`🔥 Start Content Inserting 🔥`);
@@ -52,9 +56,9 @@ test("test-cpt-grid", async ({ page }) => {
         console.log(`🔥 Content Adding Done 🔥`);
         // await init.addDesign(page);
         // Save and Exit builder
-        await global.saveAndExitBuilder(page);
+        await global_fixture.saveAndExitBuilder();
         console.log(`🔥 Close the builder 🔥`);
-        await global.removeTestPage(page);
+        await global_fixture.removeTestPage();
 
         console.groupEnd();
         //remove page
