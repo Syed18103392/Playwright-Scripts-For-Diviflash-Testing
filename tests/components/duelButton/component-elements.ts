@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import * as compose from "../../composition-helpers";
+import * as compose from "../../../includes/composition-helpers";
 import { Page } from "playwright";
 
 /**

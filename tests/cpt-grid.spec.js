@@ -1,65 +1,118 @@
 
 import { test, expect } from "@playwright/test";
-import * as init from "./includes/components/cptGrid/controller"; // add content \\ add design
-import * as global from './includes/global.ts' //global jobs : login,create page, save exit, 
-import { Global } from './includes/global-fixures.ts';
-
-
+import { Global } from '../includes/global-fixures.ts';
+import { CompositionHelper } from '../includes/composition-helpers.ts';
+// import * as compose from "../includes/composition-helpers.ts";
 
 const credential = {
-        // latest_plugin_file_path: '/Users/syedsajib/Downloads/Office/checking /production/marketplace/diviflash.zip',
-        wordpressURL: 'http://play-diviflash.test',
-        login_username: 'admin',
-        login_password: 'admin',
-        testing_page_name: 'cpt_test',
-        module_name: 'CPT Grid',
-        module_id: () => {
-                let id = credential.module_name.toLowerCase();
-                id = id.replace(/ /g, '');  // Use replace with a regular expression to remove all spaces
-                return id;
-        }
+       // latest_plugin_file_path: '/Users/syedsajib/Downloads/Office/checking /production/marketplace/diviflash.zip',
+       testing_page_name: 'cpt_test',
+       module_name: 'CPT Grid',
+       module_id: () => {
+              let id = credential.module_name.toLowerCase();
+              id = id.replace(/ /g, '');  // Use replace with a regular expression to remove all spaces
+              return id;
+       }
 };
 
+test.beforeEach(async ({ page }) => {
+       const compose = new CompositionHelper(page);
+       const global_fixture = new Global(page);
+       await page.goto('/wp-admin/edit.php?post_type=page')
+       await global_fixture.createPage({
+              page_name: credential.testing_page_name
+       })
+       await test.step('✅ Module Inserting Done', async () => {
+              await global_fixture.openDiviBuilder();
+              await global_fixture.insertModule(credential.module_name, `difl_${credential.module_id()}`);
 
-test("test-cpt-grid", async ({ page }) => {
-        const global_fixture = new Global(page);
+              await compose.expectText({
+                     selector: '.df_cptgrid_container h2',
+                     expected_text: 'Please select a Post Type.'
+              })
+       }, true)
 
-        console.group();
-        await global_fixture.loginToSite(
-                credential.wordpressURL,
-                credential.login_username,
-                credential.login_password
-        );
-        console.log(`🔥 Login To Site .. finised 🔥`);
-        await global_fixture.createPage({
-                page_name: credential.testing_page_name
-        })
 
-        if (credential.latest_plugin_file_path) {
-                console.log(`🔥 Installing Latest Diviflash 🔥`);
-                await global_fixture.installPlugin(
-                        credential.wordpressURL, credential.latest_plugin_file_path
-                )
-                console.log(`🔥 Diviflash Installed 🔥`);
-        }
-
-        console.log(`🔥 Start opening Divi Builder 🔥`);
-        await global_fixture.openDiviBuilder();
-        console.log(`🔥 Ending opening Divi Builder 🔥`);
-
-        console.log(`🔥 Start Module Inserting 🔥`);
-        await global_fixture.insertModule( credential.module_name, `difl_${credential.module_id()}`);
-        console.log(`🔥 Module Inserting Done 🔥`);
-
-        console.log(`🔥 Start Content Inserting 🔥`);
-        await init.addContent(page);
-        console.log(`🔥 Content Adding Done 🔥`);
-        // await init.addDesign(page);
-        // Save and Exit builder
-        await global_fixture.saveAndExitBuilder();
-        console.log(`🔥 Close the builder 🔥`);
-        await global_fixture.removeTestPage();
-
-        console.groupEnd();
-        //remove page
+       //CPT Settings Select Post Type = Post 
+       await compose.settingsSelectField({
+              label: 'Post Type',
+              option_name: 'Posts',
+       })
 });
+
+test.describe('CPT', () => {
+       test.describe.configure({ mode: "parallel" });
+       test('🟢 Insert Post Thumbnail', async ({ page }) => {
+
+              const compose = new CompositionHelper(page);
+
+              /**
+               * Add New Item 
+               * Type: Image
+               */
+              await test.step('✅ Select image: and check visiblity', async () => {
+                     await compose.settingsAddNewChildItem({ tooltip_name: 'Add New Item' });
+
+                     await compose.settingsSelectField({
+                            label: 'Type',
+                            option_name: 'Image',
+                     })
+                     await compose.expectVisiblity({
+                            selector: 'article a img',
+                            snap_label: 'Post-Thumbnail'
+                     })
+              });
+              await test.step('Out Side innerWrapper Testing ', async () => {
+                     await test.step('Turn On', async () => {
+                            await compose.settingsSwitch({
+
+                                   label: 'Outside Inner Wrapper'
+                            })
+                            await compose.expectVisiblity({
+
+                                   selector: '.df-cpt-outer-wrap img',
+                                   snap_label: 'Outside Image Turn on',
+                                   expect_visiblity: true
+                            })
+                     });
+                     await test.step('Turn Off', async () => {
+                            await compose.settingsSwitch({
+
+                                   label: 'Outside Inner Wrapper'
+                            })
+                            await compose.expectVisiblity({
+
+                                   selector: '.df-cpt-inner-wrap img',
+                                   snap_label: 'Outside Image turn off',
+                            })
+                     });
+
+              });
+
+       });
+       test('🟢 Insert Post Title ', async ({ page }) => {
+              const compose = new CompositionHelper(page);
+
+              /**
+               * Add New Item 
+               * Type: Title
+               */
+              await test.step('✅ Select Post Title: and check visiblity', async () => {
+                     await compose.settingsAddNewChildItem({ tooltip_name: 'Add New Item' });
+                     //Add Type Of The Item
+                     await compose.settingsSelectField({
+
+                            label: 'Type',
+                            option_name: 'Title',
+                     })
+                     await compose.expectVisiblity({
+
+                            selector: 'article h2.df-cpt-title a',
+                            snap_label: 'Post-Title'
+                     })
+              });
+
+
+       });
+});
+

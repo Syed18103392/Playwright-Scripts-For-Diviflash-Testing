@@ -1,4 +1,4 @@
-import type { Page , expect} from '@playwright/test';
+import  { Page , expect} from '@playwright/test';
 
 export class Global {
 
@@ -42,7 +42,7 @@ export class Global {
 
               await this.page.getByRole("button", { name: "Upload Plugin", exact: true }).click();
               const fileInput = await this.page.$('input[type="file"]');
-              await fileInput.setInputFiles(pluginFilePath);
+              await fileInput?.setInputFiles(pluginFilePath);
               await this.page.click('input#install-plugin-submit');
 
               if (isPluginActivated) {

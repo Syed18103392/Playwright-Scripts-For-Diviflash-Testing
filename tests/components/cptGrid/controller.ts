@@ -1,5 +1,4 @@
-import * as components from "./component-elements";
-import * as compose from "../../composition-helpers";
+import * as compose from "../../../includes/composition-helpers";
 import { Page } from "playwright";
 
 export async function addContent(page) {
@@ -27,7 +26,6 @@ export async function addContent(page) {
                 label: 'Type',
                 option_name: 'Image',
         })
-        await page.screenshot({ path: 'snapshots/imageVisiblity.png' });
         await compose.expectImageVisiblity({
                 page:page,
                 selector:'article:nth-child(1) a img'
