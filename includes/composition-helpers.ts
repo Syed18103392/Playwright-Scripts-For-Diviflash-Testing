@@ -15,6 +15,15 @@ export class CompositionHelper {
 		await this.page.locator(".et-fb-tabs__item.et-fb-tabs__item--general").click();
 	}
 
+	public image_scale_type = {
+		'Zoom In': 'df-image-zoom-in',
+		'Zoom Out': 'df-image-zoom-out',
+		// 'Pan Up'	:	'df-image-pan-up',
+		// 'Pan Down'	:	'df-image-pan-down',
+		// 'Pan Left'	:	'df-image-pan-left',
+		// 'Pan Right'	:	'df-image-pan-right',
+
+	}
 	/**
 	 * Enable the Design tab on a this.page.
 	 *
@@ -60,7 +69,7 @@ export class CompositionHelper {
 	 * @returns {Promise<void>} A promise that resolves when the control is toggled.
 	 */
 	async settingsToggle({ label }: { label: string }) {
-		await this.page.getByText(label, { exact: true }).click();
+		await this.page.locator('.et-fb-modal__content').getByText(label, { exact: true }).click();
 	}
 
 	/**
@@ -95,7 +104,8 @@ export class CompositionHelper {
 			isItFont: isItFont
 		});
 		await parent.locator(".et-fb-settings-option-select-advanced").click();
-		await this.page.getByText(option_name, { exact: true }).click();
+		// await this.page.locator('ul.et-fb-settings-option-select li').filter( { has: this.page.getByText(option_name, { exact: true }) }).click();
+		await parent.getByText(option_name, { exact: true }).click();
 	}
 
 	/**
@@ -176,24 +186,19 @@ export class CompositionHelper {
 		});
 		await parent.locator(".et-fb-settings-color-manager__reset-color").click();
 	}
-	async settingsColor__Gradient({
-
-	}: {
-
-		}) {
+	async settingsColorGradient() {
 		await this.page.locator('.et-fb-icon--background-gradient').click();
 		await this.settingsSwitch({
-
 			label: 'Use gradient background'
 		});
 	}
+	async settingsColorGradient_DefaultDivi() {
+		await this.page.locator('.et-fb-icon--background-gradient').click();
+		await this.page.getByText('Add Background Gradient', { exact: true }).click()
+	}
 
 
-	async settingsColor__Image({
-
-	}: {
-
-		}) {
+	async settingsColor__Image() {
 		await this.page.locator('.et-fb-icon--background-image').click();
 		await this.page.locator('.et-fb-settings-option-upload-type-image').click();
 		await this.page.locator('#menu-item-browse').click();
@@ -253,7 +258,34 @@ export class CompositionHelper {
 	}) {
 		await this.page.locator(`button[data-tip='${tooltip_name}']`).click();
 	}
+	async settingsBackgroundColor__DefaultDivi(selector) {
+		await this.settingsColor({
+			label: 'Background',
+			colorNumber: 3,
+		})
+		await this.expectStyleValue({
+			selector: selector,
+			style_name: 'background-color',
+			expected_value: 'rgb(224, 43, 32)' //#E02B20
+		})
+	}
+	async settingsBackgroundGradient__DefaultDivi(selector) {
+		await this.settingsColorGradient_DefaultDivi();
 
+		await this.expectStyleValue({
+			selector: selector,
+			style_name: 'background-image',
+			expected_value: 'linear-gradient(rgb(43, 135, 218) 0%, rgb(41, 196, 169) 100%)' //linear-gradient( 180deg, #2b87da 0%, #29c4a9 100% )
+		})
+	}
+	async settingsBackgroundImage__DefaultDivi(selector) {
+
+		await this.settingsColor__Image();
+		await this.expectVisiblity({
+			selector: selector,
+			snap_label: 'Background Color',
+		})
+	}
 	//SECTION - Validation Section
 	/**
 	 * Assert that a specific text is present in the specified selector.
@@ -277,17 +309,17 @@ export class CompositionHelper {
 	}
 
 	async expectStyleValue({
-
 		selector,
 		style_name,
 		expected_value
 	}: {
-
 		selector: string,
 		style_name: string,
 		expected_value: string,
 	}) {
-		await expect.soft(await this.page.frameLocator('iFrame').locator(selector)).toHaveCSS(style_name, expected_value);
+		await this.page.waitForLoadState();
+		await this.page.screenshot({ path: `snapshots/expectVisiblity:${selector}.png` });
+		await expect.soft(await this.page.frameLocator('iFrame').locator(selector).first()).toHaveCSS(style_name, expected_value);
 	}
 	//!SECTION
 
@@ -302,6 +334,9 @@ export class CompositionHelper {
 		expect_visiblity?: boolean
 		snap_label: string,
 	}) {
+		if (snap_label != '') {
+			await this.page.screenshot({ path: `snapshots/expectVisiblity:${snap_label}.png` });
+		}
 		if (await expect_visiblity) {
 
 			await expect.soft(await this.page.frameLocator('iFrame').locator(selector).first()).toBeVisible();
@@ -309,7 +344,7 @@ export class CompositionHelper {
 		else {
 			await expect.soft(await this.page.frameLocator('iFrame').locator(selector).first()).not.toBeVisible();
 		}
-		await this.page.screenshot({ path: `snapshots/expectVisiblity:${snap_label}.png` });
+
 	}
 
 }
