@@ -154,7 +154,6 @@ export class CompositionHelper {
 
 
 	async settingsColor({
-
 		label,
 		colorNumber,
 	}: {
@@ -174,7 +173,6 @@ export class CompositionHelper {
 			.click();
 	}
 	async settingsColor__Transparent({
-
 		label,
 	}: {
 
@@ -266,9 +264,20 @@ export class CompositionHelper {
 		await this.expectStyleValue({
 			selector: selector,
 			style_name: 'background-color',
-			expected_value: 'rgb(224, 43, 32)' //#E02B20
+			expected_value: 'rgb(224, 43, 32)' 
 		})
 	}
+	async settingsBackgroundTransparent__DefaultDivi(selector){
+		await this.settingsColor__Transparent({
+			label:'Background',
+		})
+		await this.expectStyleValue({
+			selector:selector,
+			style_name:'background-color',
+			expected_value:'rgba(255, 255, 255, 0)'
+		})
+	}
+
 	async settingsBackgroundGradient__DefaultDivi(selector) {
 		await this.settingsColorGradient_DefaultDivi();
 

@@ -2,7 +2,7 @@
   "cookies": [
     {
       "name": "wordpress_13accdddeb32efd913c44de4c96bdb48",
-      "value": "admin%7C1706704484%7CGVbvubLwwvSsUUoxDUanxMw1kPc6ItrrtPXwwg8yDdq%7C456ec8ae0392a94d3587758a9aa07ad90ab187e9c5cc26afff158f5ac5e811d3",
+      "value": "admin%7C1706782893%7CeJB9vIYBPkPHuOplsiwiqE8nGVFplBnx9vys2LgWDGz%7C90196e5ea836d03ae05a7682ba9ed535b4481724c8038b6b44c28ce06bcd93bd",
       "domain": "play-diviflash.test",
       "path": "/wp-content/plugins",
       "expires": -1,
@@ -12,7 +12,7 @@
     },
     {
       "name": "wordpress_13accdddeb32efd913c44de4c96bdb48",
-      "value": "admin%7C1706704484%7CGVbvubLwwvSsUUoxDUanxMw1kPc6ItrrtPXwwg8yDdq%7C456ec8ae0392a94d3587758a9aa07ad90ab187e9c5cc26afff158f5ac5e811d3",
+      "value": "admin%7C1706782893%7CeJB9vIYBPkPHuOplsiwiqE8nGVFplBnx9vys2LgWDGz%7C90196e5ea836d03ae05a7682ba9ed535b4481724c8038b6b44c28ce06bcd93bd",
       "domain": "play-diviflash.test",
       "path": "/wp-admin",
       "expires": -1,
@@ -32,7 +32,7 @@
     },
     {
       "name": "wordpress_logged_in_13accdddeb32efd913c44de4c96bdb48",
-      "value": "admin%7C1706704484%7CGVbvubLwwvSsUUoxDUanxMw1kPc6ItrrtPXwwg8yDdq%7Caf38f18d281586cbc2194bedac8b3d47fc69e06f7173f2dd527ce9ca363c8c14",
+      "value": "admin%7C1706782893%7CeJB9vIYBPkPHuOplsiwiqE8nGVFplBnx9vys2LgWDGz%7C605a4962c9e96c79ccf5b4c7464b27460e9660ca3614f895bd00dabf3a014ca3",
       "domain": "play-diviflash.test",
       "path": "/",
       "expires": -1,
@@ -42,20 +42,20 @@
     },
     {
       "name": "wp-settings-1",
-      "value": "imgsize%3D",
+      "value": "imgsize%3D%26libraryContent%3Dbrowse",
       "domain": "play-diviflash.test",
       "path": "/",
-      "expires": 1738067684.538672,
+      "expires": 1738146093.479929,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "wp-settings-time-1",
-      "value": "1706531684",
+      "value": "1706610093",
       "domain": "play-diviflash.test",
       "path": "/",
-      "expires": 1738067684.538835,
+      "expires": 1738146093.480106,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"

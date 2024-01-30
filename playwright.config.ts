@@ -13,9 +13,9 @@ export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: 3,
-  workers: 6,
-
+  retries: 2,
+  workers: 3,
+  timeout: 5 * 60 * 10000,
   reporter: [
     ['html'],
     ['list', { printSteps: true }]
