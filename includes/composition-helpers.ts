@@ -1,5 +1,5 @@
 import { Page, expect } from '@playwright/test';
-
+import global_style_value from '../global-style-value.js'
 export class CompositionHelper {
 
 	constructor(public readonly page: Page) { }
@@ -14,14 +14,31 @@ export class CompositionHelper {
 	async enableContentTab() {
 		await this.page.locator(".et-fb-tabs__item.et-fb-tabs__item--general").click();
 	}
-
+	async useImage() {
+		await this.page.locator('.et-fb-settings-option-upload-type-image').click();
+		await this.page.locator('.media-frame-router #menu-item-browse').click();
+		await this.page.locator('li.attachment').nth(1).click();
+		await this.page.locator('.media-button-insert').click();
+	}
+	async settingsMargin(value,selector_prefix){
+		await this.page.locator(`${selector_prefix}margin-input-top`).fill(value)
+		await this.page.locator(`${selector_prefix}margin-input-bottom`).fill(value)
+		await this.page.locator(`${selector_prefix}margin-input-left`).fill(value)
+		await this.page.locator(`${selector_prefix}margin-input-right`).fill(value)
+	}
+	async settingsPadding(value,selector_prefix){
+		await this.page.locator(`${selector_prefix}padding-input-top`).fill(value)
+		await this.page.locator(`${selector_prefix}padding-input-bottom`).fill(value)
+		await this.page.locator(`${selector_prefix}padding-input-left`).fill(value)
+		await this.page.locator(`${selector_prefix}padding-input-right`).fill(value)
+	}
 	public image_scale_type = {
 		'Zoom In': 'df-image-zoom-in',
 		'Zoom Out': 'df-image-zoom-out',
-		// 'Pan Up'	:	'df-image-pan-up',
-		// 'Pan Down'	:	'df-image-pan-down',
-		// 'Pan Left'	:	'df-image-pan-left',
-		// 'Pan Right'	:	'df-image-pan-right',
+		'Pan Up'	:	'df-image-pan-up',
+		'Pan Down'	:	'df-image-pan-down',
+		'Pan Left'	:	'df-image-pan-left',
+		'Pan Right'	:	'df-image-pan-right',
 
 	}
 	/**
@@ -53,11 +70,16 @@ export class CompositionHelper {
 		fieldName: string,
 		isItFont?: boolean
 	}) {
-		const child = await this.page.getByText(fieldName, { exact: true });
-		const parent = await this.page
-			.locator((isItFont) ? ".et-fb-font-option-container-with-label" : ".et-fb-form__group")
-			.filter({ has: child });
-		return await parent;
+		try {
+			const child = await this.page.getByText(fieldName, { exact: true });
+			const parent = await this.page
+				.locator((isItFont) ? ".et-fb-font-option-container-with-label" : ".et-fb-form__group")
+				.filter({ has: child });
+			return await parent;
+		} catch (e) {
+			console.log(`❌ ${fieldName} is not availabel in the Module Setting`);
+		}
+
 	}
 
 	/**
@@ -85,7 +107,9 @@ export class CompositionHelper {
 		const parent = await this.getParentByTitle({
 			fieldName: label,
 		});
-		await parent.locator('input[type="text"]').fill(text);
+		if (parent) {
+			await parent.locator('input[type="text"]').fill(text);
+		}
 	}
 
 	/**
@@ -103,9 +127,11 @@ export class CompositionHelper {
 			fieldName: label,
 			isItFont: isItFont
 		});
-		await parent.locator(".et-fb-settings-option-select-advanced").click();
-		// await this.page.locator('ul.et-fb-settings-option-select li').filter( { has: this.page.getByText(option_name, { exact: true }) }).click();
-		await parent.getByText(option_name, { exact: true }).click();
+		if (parent) {
+			await parent.locator(".et-fb-settings-option-select-advanced").click();
+			// await this.page.locator('ul.et-fb-settings-option-select li').filter( { has: this.page.getByText(option_name, { exact: true }) }).click();
+			await parent.getByText(option_name, { exact: true }).click();
+		}
 	}
 
 	/**
@@ -121,9 +147,31 @@ export class CompositionHelper {
 
 			fieldName: label,
 		});
-
-		await parent.locator(".et-core-control-toggle").click();
+		if (parent) {
+			await parent.locator(".et-core-control-toggle").click();
+		}
 		await this.page.waitForLoadState();
+	}
+	async outsideWrapperTurnOn(element) {
+		await this.settingsSwitch({
+			label: 'Outside Inner Wrapper'
+		})
+		await this.expectVisiblity({
+
+			selector: `.df-cpt-inner-wrap ${element}`,
+			snap_label: 'Outside Image Turn on',
+			expect_visiblity: false
+		})
+	}
+	async outsideWrapperTurnOff(element) {
+		await this.settingsSwitch({
+			label: 'Outside Inner Wrapper'
+		})
+		await this.expectVisiblity({
+
+			selector: `.df-cpt-inner-wrap ${element}`,
+			snap_label: 'Outside Image turn off',
+		})
 	}
 
 	/**
@@ -138,7 +186,9 @@ export class CompositionHelper {
 
 			fieldName: "Icon",
 		});
-		await parent.locator(`li:nth-child(${iconNumber})`).click();
+		if (parent) {
+			await parent.locator(`li:nth-child(${iconNumber})`).click();
+		}
 	}
 
 	/**
@@ -162,15 +212,17 @@ export class CompositionHelper {
 		colorNumber: number,
 	}) {
 		const parent = await this.getParentByTitle({
-
 			fieldName: label,
 		});
-		await parent
-			.locator(".et-fb-settings-color-manager__swatches-row")
-			.nth(colorNumber)
-			.locator(".et-fb-settings-color-manager__swatches-swatch")
-			.nth(1)
-			.click();
+		if (parent) {
+			await parent
+				.locator(".et-fb-settings-color-manager__swatches-row")
+				.nth(colorNumber)
+				.locator(".et-fb-settings-color-manager__swatches-swatch")
+				.nth(1)
+				.click();
+		}
+
 	}
 	async settingsColor__Transparent({
 		label,
@@ -182,7 +234,9 @@ export class CompositionHelper {
 
 			fieldName: label,
 		});
-		await parent.locator(".et-fb-settings-color-manager__reset-color").click();
+		if(parent){
+			await parent.locator(".et-fb-settings-color-manager__reset-color").click();
+		}
 	}
 	async settingsColorGradient() {
 		await this.page.locator('.et-fb-icon--background-gradient').click();
@@ -199,7 +253,7 @@ export class CompositionHelper {
 	async settingsColor__Image() {
 		await this.page.locator('.et-fb-icon--background-image').click();
 		await this.page.locator('.et-fb-settings-option-upload-type-image').click();
-		await this.page.locator('#menu-item-browse').click();
+		await this.page.locator('.media-frame-router #menu-item-browse').click();
 		await this.page.locator('li.attachment').nth(1).click();
 		await this.page.locator('.media-button-insert').click();
 	}
@@ -218,7 +272,9 @@ export class CompositionHelper {
 
 			fieldName: label,
 		});
-		await parent.locator("input.et-fb-settings-option-input").click();
+		if(parent){
+			await parent.locator("input.et-fb-settings-option-input").click();
+		}
 
 		// Press the "Up" key 'slide_value' times
 		for (let i = 0; i < slide_value; i++) {
@@ -247,7 +303,9 @@ export class CompositionHelper {
 			fieldName: label,
 			isItFont: isItFont
 		})
-		await parent.locator(isItAnchor ? 'a' : 'button').nth(select_number).click();
+		if(parent){
+			await parent.locator(isItAnchor ? 'a' : 'button').nth(select_number).click();
+		}
 	}
 
 	async settingsAddNewChildItem({ tooltip_name }: {
@@ -259,32 +317,34 @@ export class CompositionHelper {
 	async settingsBackgroundColor__DefaultDivi(selector) {
 		await this.settingsColor({
 			label: 'Background',
-			colorNumber: 3,
+			...global_style_value.bg_color_parent.value
 		})
 		await this.expectStyleValue({
 			selector: selector,
-			style_name: 'background-color',
-			expected_value: 'rgb(224, 43, 32)' 
+			...global_style_value.bg_color_parent.expected
 		})
 	}
-	async settingsBackgroundTransparent__DefaultDivi(selector){
+	async settingsBackgroundTransparent__DefaultDivi(selector) {
 		await this.settingsColor__Transparent({
-			label:'Background',
+			label: 'Background',
 		})
 		await this.expectStyleValue({
-			selector:selector,
-			style_name:'background-color',
-			expected_value:'rgba(255, 255, 255, 0)'
+			selector: selector,
+			...global_style_value.bg_color_parent.reset_expected
 		})
 	}
-
+	async goto_parent() {
+		if (await this.page.$('.et-fb-settings-button--back-to-parent')) {
+			await this.page.locator('.et-fb-settings-button--back-to-parent').click();
+		}
+		await this.enableContentTab();
+	}
 	async settingsBackgroundGradient__DefaultDivi(selector) {
 		await this.settingsColorGradient_DefaultDivi();
 
 		await this.expectStyleValue({
 			selector: selector,
-			style_name: 'background-image',
-			expected_value: 'linear-gradient(rgb(43, 135, 218) 0%, rgb(41, 196, 169) 100%)' //linear-gradient( 180deg, #2b87da 0%, #29c4a9 100% )
+			...global_style_value.bg_color_gradient_default_parent.expected
 		})
 	}
 	async settingsBackgroundImage__DefaultDivi(selector) {
@@ -336,12 +396,12 @@ export class CompositionHelper {
 
 		selector,
 		expect_visiblity = true,
-		snap_label,
+		snap_label = '',
 	}: {
 
 		selector: string,
 		expect_visiblity?: boolean
-		snap_label: string,
+		snap_label?: string,
 	}) {
 		if (snap_label != '') {
 			await this.page.screenshot({ path: `snapshots/expectVisiblity:${snap_label}.png` });

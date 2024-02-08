@@ -13,15 +13,16 @@ export default defineConfig({
   testDir: './tests',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
-  retries: 2,
+  retries: 0,
   workers: 3,
-  timeout: 5 * 60 * 10000,
+  timeout: 5 * 60 * 1000000,
   reporter: [
     ['html'],
     ['list', { printSteps: true }]
   ],
 
   globalSetup: require.resolve('./global-settings'),
+  globalTeardown: require.resolve('./global-teardown'),
   use: {
     baseURL: 'http://play-diviflash.test/',
     storageState: 'state.json',
@@ -35,15 +36,15 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
     // {

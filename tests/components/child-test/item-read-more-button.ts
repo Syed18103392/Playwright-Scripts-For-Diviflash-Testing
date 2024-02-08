@@ -2,12 +2,11 @@ import { test, expect } from "@playwright/test";
 import { Global } from '../../../includes/global-fixures.ts';
 import { CompositionHelper } from '../../../includes/composition-helpers.ts';
 
-export default test('🟢 Insert Read More Button ', async ({ page }) => {
+export default async function (page){
        const compose = new CompositionHelper(page);
-
        /**
         * Add New Item 
-        * Type: Content
+        * Type: Read More Button
         */
        await test.step('✅ Select Post Title: and check visiblity', async () => {
               await compose.settingsAddNewChildItem({ tooltip_name: 'Add New Item' });
@@ -23,6 +22,4 @@ export default test('🟢 Insert Read More Button ', async ({ page }) => {
                      snap_label: 'Post-Read-more-button'
               })
        });
-
-       
-});
+}

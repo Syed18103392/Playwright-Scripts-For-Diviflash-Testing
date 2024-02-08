@@ -63,8 +63,8 @@ export class Global {
               await expect(await this.page.getByLabel('Deactivate DiviFlash')).toBeVisible();
        }
        async openDiviBuilder(page) {
-              await this.page.waitForSelector(".components-snackbar");
-              await this.page.getByRole("button", { name: "Use Divi Builder" }).click();
+              await this.page.locator('td.title.column-title.has-row-actions.column-primary.page-title',{hasText:'cpt_test'}).first().hover();
+              await this.page.getByText("Edit With Divi", { exact: true }).click();
               await this.page.getByRole("button", { name: "Start Building" }).click();
               await this.page.locator('span.column-block[data-layout="4_4"]').click();
        }

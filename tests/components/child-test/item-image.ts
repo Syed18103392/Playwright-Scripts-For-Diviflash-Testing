@@ -2,14 +2,14 @@ import { test, expect } from "@playwright/test";
 import { Global } from '../../../includes/global-fixures.ts';
 import { CompositionHelper } from '../../../includes/composition-helpers.ts';
 
-export default test('🟢 Insert Post Image', async ({ page }) => {
-
+export default async function(page){
        const compose = new CompositionHelper(page);
 
        /**
         * Add New Item 
         * Type: Image
         */
+       
        await test.step('Elements', async () => {
               await compose.settingsAddNewChildItem({ tooltip_name: 'Add New Item' });
               await test.step('Type', async () => {
@@ -32,9 +32,9 @@ export default test('🟢 Insert Post Image', async ({ page }) => {
                             })
                             await compose.expectVisiblity({
 
-                                   selector: '.df-cpt-outer-wrap img',
+                                   selector: '.df-cpt-inner-wrap img',
                                    snap_label: 'Outside Image Turn on',
-                                   expect_visiblity: true
+                                   expect_visiblity: false
                             })
                      });
                      await test.step('Turn Off', async () => {
@@ -92,7 +92,4 @@ export default test('🟢 Insert Post Image', async ({ page }) => {
 
 
        });
-
-
-
-});
+}

@@ -21,10 +21,6 @@ const credential = {
 };
 
 async function globalSetup(config: FullConfig) {
-
-       // await this.page.goto(`${url}/wp-admin`);
-
-
        const { baseURL, storageState } = config.projects[0].use;
        const browser = await chromium.launch();
        const page = await browser.newPage();
