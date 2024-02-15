@@ -2,6 +2,8 @@ import { test, expect } from "@playwright/test";
 import { Global } from '../../../includes/global-fixures.ts';
 import { CompositionHelper } from '../../../includes/composition-helpers.ts';
 import global_style_value from '../../../global-style-value.js';
+import { text } from "stream/consumers";
+import { loadavg } from "os";
 
 export default async function (page, targetedSelector: string, {
     Alignment = false,
@@ -155,17 +157,21 @@ export default async function (page, targetedSelector: string, {
                 });
                 if (Author_spacing) {
                     await test.step('Author Image Margin', async () => {
-                        await compose.settingsMargin(global_style_value.margin_parent.value, '#et-fb-author_image_')
+                        await compose.settingsMargin(
+                            global_style_value.author_margin_parent.value,
+                            '#et-fb-author_image_'
+                        )
+
                         await compose.expectStyleValue({
                             'selector': `${targetedSelector} .author-image`,
                             ...global_style_value.author_margin_parent.expected
                         })
                     });
-                    await test.step('Author Image Padding', async () => {
-                        await compose.settingsMargin(global_style_value.padding_parent.value, '#et-fb-author_image_')
+                    await test.step('Icon Margin', async () => {
+                        await compose.settingsMargin(global_style_value.icon_margin_parent.value, '#et-fb-icon_')
                         await compose.expectStyleValue({
-                            'selector': `${targetedSelector} .author-image`,
-                            ...global_style_value.author_margin_parent.expected
+                            'selector': `${targetedSelector} .et-pb-icon`,
+                            ...global_style_value.icon_margin_parent.expected
                         })
                     });
                 }
@@ -173,7 +179,68 @@ export default async function (page, targetedSelector: string, {
 
 
         }
+        //FIXME - This has percentage value. but Playwright return computed css value which is in pixel
+        if (Sizing) {
+            await test.step('Sizing', async () => {
+                await compose.settingsToggle({
+                    label: 'Sizing'
+                })
+                await test.step('Width', async () => {
+                    await compose.settingsModuleWidth(targetedSelector);
 
+                });
+
+            });
+
+        }
+        // ------------
+
+        if (Border) {
+            await test.step('Border', async () => {
+                await compose.settingsToggle({ label: 'Border' });
+                await test.step('Border Radius', async () => {
+                    await compose.settingsModuleBorderRadius(targetedSelector);
+                });
+                await await test.step('Border Width', async () => {
+                    await compose.settingsSlider({
+                        label: 'Border Width',
+                        slide_value: 3,
+                    });
+                    await compose.expectStyleValue({
+                        selector: targetedSelector,
+                        style_name: 'border-width',
+                        expected_value: '3px'
+                    })
+                });
+                await test.step('Border color', async () => {
+                    await compose.settingsColor({
+                        label: 'Border Color',
+                        ...global_style_value.border_color_parent.value
+                    })
+                    await compose.expectStyleValue({
+                        selector: targetedSelector,
+                        ...global_style_value.border_color_parent.expected
+                    })
+                });
+
+            });
+
+        }
+        if (BoxShadow) {
+            await test.step('Box Shadow', async () => {
+                await compose.settingsToggle({ label: 'Box Shadow' });
+                await compose.settingsSelectButton({
+                    label: 'Box Shadow',
+                    ...global_style_value.box_shadow_parent.value
+                })
+                await compose.expectStyleValue({
+                    selector: targetedSelector,
+                    ...global_style_value.box_shadow_parent.expected
+                })
+            });
+
+
+        }
     });
 
 }

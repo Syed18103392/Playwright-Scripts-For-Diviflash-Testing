@@ -210,46 +210,17 @@ export default async function (page, targetedSelector) {
 				});
 			});
 			await test.step('Use Icon', async () => {
-				await compose.settingsSwitch({
-					label:'Use Icon'
-				})
-				await compose.expectVisiblity({
-					selector: `${targetedSelector} span.et-pb-icon`,
-				})
-				await test.step('Icon Color', async () => {
-					await compose.settingsColor({
-						'label' : 'Icon Color',
-						...global_style_value.element_color_parent.value
-					})
-					await compose.expectStyleValue({
-						selector:`${targetedSelector} span.et-pb-icon`,
-						...global_style_value.element_color_parent.expected
-					})
-					page
-				});
-				await test.step('Icon Size', async () => {
-					await compose.settingsSlider({
-						label:'Icon Size',
-						...global_style_value.icon_size_parent.value
-					})
-					await compose.expectStyleValue({
-						selector: `${targetedSelector} span.et-pb-icon`,
-						...global_style_value.icon_size_parent.expected
-					})
-				});
-				
-				
+				await compose.settingsUseIcons(test,targetedSelector)		
 			});
-			
-	
-	
-	
 		});
 	});
 	await design_tab(page,targetedSelector,{
 		Alignment:true,
 		BodyText:true,
 		Spacing:true,
-		Author_spacing:true
+		Author_spacing:true,
+		Border:true,
+		BoxShadow:true
+		// Sizing:true //FIXME - this
 	});
 }

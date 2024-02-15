@@ -1,3 +1,4 @@
+import { selectors } from '@playwright/test';
 import { Page, expect } from '@playwright/test';
 import global_style_value from '../global-style-value.js'
 export class CompositionHelper {
@@ -20,13 +21,13 @@ export class CompositionHelper {
 		await this.page.locator('li.attachment').nth(1).click();
 		await this.page.locator('.media-button-insert').click();
 	}
-	async settingsMargin(value,selector_prefix){
+	async settingsMargin(value, selector_prefix) {
 		await this.page.locator(`${selector_prefix}margin-input-top`).fill(value)
 		await this.page.locator(`${selector_prefix}margin-input-bottom`).fill(value)
 		await this.page.locator(`${selector_prefix}margin-input-left`).fill(value)
 		await this.page.locator(`${selector_prefix}margin-input-right`).fill(value)
 	}
-	async settingsPadding(value,selector_prefix){
+	async settingsPadding(value, selector_prefix) {
 		await this.page.locator(`${selector_prefix}padding-input-top`).fill(value)
 		await this.page.locator(`${selector_prefix}padding-input-bottom`).fill(value)
 		await this.page.locator(`${selector_prefix}padding-input-left`).fill(value)
@@ -35,10 +36,10 @@ export class CompositionHelper {
 	public image_scale_type = {
 		'Zoom In': 'df-image-zoom-in',
 		'Zoom Out': 'df-image-zoom-out',
-		'Pan Up'	:	'df-image-pan-up',
-		'Pan Down'	:	'df-image-pan-down',
-		'Pan Left'	:	'df-image-pan-left',
-		'Pan Right'	:	'df-image-pan-right',
+		'Pan Up': 'df-image-pan-up',
+		'Pan Down': 'df-image-pan-down',
+		'Pan Left': 'df-image-pan-left',
+		'Pan Right': 'df-image-pan-right',
 
 	}
 	/**
@@ -234,7 +235,7 @@ export class CompositionHelper {
 
 			fieldName: label,
 		});
-		if(parent){
+		if (parent) {
 			await parent.locator(".et-fb-settings-color-manager__reset-color").click();
 		}
 	}
@@ -272,7 +273,7 @@ export class CompositionHelper {
 
 			fieldName: label,
 		});
-		if(parent){
+		if (parent) {
 			await parent.locator("input.et-fb-settings-option-input").click();
 		}
 
@@ -303,7 +304,7 @@ export class CompositionHelper {
 			fieldName: label,
 			isItFont: isItFont
 		})
-		if(parent){
+		if (parent) {
 			await parent.locator(isItAnchor ? 'a' : 'button').nth(select_number).click();
 		}
 	}
@@ -347,6 +348,62 @@ export class CompositionHelper {
 			...global_style_value.bg_color_gradient_default_parent.expected
 		})
 	}
+	async settingsModuleWidth(selector) {
+		await this.page.locator('#et-fb-width-number').fill('50');
+		await this.expectStyleValue({
+			selector: selector,
+			style_name: 'width',
+			expected_value: '50%'
+		})
+	}
+	async settingsModuleBorderRadius(targetedSelector) {
+		await this.page.locator('.et-fb-settings-border-radius-top-left input').fill('100');
+		await this.page.locator('.et-fb-settings-border-radius-top-right input').fill('100');
+		await this.page.locator('.et-fb-settings-border-radius-bottom-left input').fill('100');
+		await this.page.locator('.et-fb-settings-border-radius-bottom-right input').fill('100');
+		await this.expectStyleValue({
+			selector: targetedSelector,
+			style_name: 'border-radius',
+			expected_value: '100px',
+		})
+
+	}
+	async settingsUseIcons(test_object, targetedSelector) {
+		//Check Default Behaviour 
+		await test_object.step('Default-Icon-Visiblity', async () => {
+			await this.expectVisiblity({
+				selector: `${targetedSelector} .et-pb-icon`,
+				expect_visiblity: false
+			})
+		});
+		await this.settingsSwitch({
+			label: 'Use Icon'
+		})
+		await this.expectVisiblity({
+			selector: `${targetedSelector} span.et-pb-icon`,
+		})
+		await test_object.step('Icon Color', async () => {
+			await this.settingsColor({
+				'label': 'Icon Color',
+				...global_style_value.element_color_parent.value
+			})
+			await this.expectStyleValue({
+				selector: `${targetedSelector} span.et-pb-icon`,
+				...global_style_value.element_color_parent.expected
+			})
+			this.page
+		});
+		await test_object.step('Icon Size', async () => {
+			await this.settingsSlider({
+				label: 'Icon Size',
+				...global_style_value.icon_size_parent.value
+			})
+			await this.expectStyleValue({
+				selector: `${targetedSelector} span.et-pb-icon`,
+				...global_style_value.icon_size_parent.expected
+			})
+		});
+	}
 	async settingsBackgroundImage__DefaultDivi(selector) {
 
 		await this.settingsColor__Image();
@@ -374,7 +431,7 @@ export class CompositionHelper {
 		selector: string,
 		expected_text: string
 	}) {
-		await expect.soft(await this.page.frameLocator('iFrame').locator(selector)).toContainText(expected_text);
+		await expect.soft(await this.page.frameLocator('iFrame').locator(selector).first()).toContainText(expected_text);
 	}
 
 	async expectStyleValue({

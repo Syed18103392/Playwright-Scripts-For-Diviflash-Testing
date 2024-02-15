@@ -70,7 +70,10 @@ export default async (page, selector) => {
 	await design_tab(page,selector,{
 		Alignment:true,
 		BodyText:true,
-		Spacing:true
+		Spacing:true,
+		Border:true,
+		BoxShadow:true,
+		
 	});
 
 }

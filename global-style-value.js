@@ -16,6 +16,23 @@ export default {
             expected_value: 'rgb(224, 43, 32)',
         }
     },
+    border_color_parent: {
+        value: { colorNumber: 3 },
+        expected: {
+            style_name: 'border-color',
+            expected_value: 'rgb(224, 43, 32)',
+        }
+    },
+    box_shadow_parent:{
+        value:{
+            isItAnchor:true,
+            select_number : 1,
+        },
+        expected:{
+            style_name:'box-shadow',
+            expected_value:'rgba(0, 0, 0, 0.3) 0px 2px 18px 0px'
+        }
+    },
     icon_image_width: {
         value: {
             slide_value: 10,
@@ -53,6 +70,13 @@ export default {
         expected: {
             style_name: 'margin',
             expected_value: '20px'
+        }
+    },
+    icon_margin_parent: {
+        value: '23',
+        expected: {
+            style_name: 'margin',
+            expected_value: '23px'
         }
     },
     author_padding_parent: {
