@@ -48,6 +48,20 @@ export default {
             expected_value: '30px'
         }
     },
+    author_margin_parent: {
+        value: '20',
+        expected: {
+            style_name: 'margin',
+            expected_value: '20px'
+        }
+    },
+    author_padding_parent: {
+        value: '21',
+        expected: {
+            style_name: 'padding',
+            expected_value: '21px'
+        }
+    },
     text_align_parent: {
         value: {
             select_number: 2

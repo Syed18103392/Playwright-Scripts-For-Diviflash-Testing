@@ -4,8 +4,16 @@ import { CompositionHelper } from '../../../includes/composition-helpers.ts';
 import global_style_value from '../../../global-style-value.js';
 
 export default async function (page, targetedSelector: string, {
-    Alignment=false ,ImageSettings=false,BodyText=false,BeforeAfter=false,Spacing=false,Sizing=false,Border=false,BoxShadow=false
-}){
+    Alignment = false,
+    ImageSettings = false,
+    BodyText = false,
+    BeforeAfter = false,
+    Spacing = false,
+    Author_spacing = false,
+    Sizing = false,
+    Border = false,
+    BoxShadow = false
+}) {
     const compose = new CompositionHelper(page);
     await test.step('Design Element', async () => {
         await compose.enableDesignTab();
@@ -132,20 +140,37 @@ export default async function (page, targetedSelector: string, {
                     label: 'Spacing',
                 })
                 await test.step('Margin', async () => {
-                    await compose.settingsMargin(global_style_value.margin_parent.value,'#et-fb-element_')
+                    await compose.settingsMargin(global_style_value.margin_parent.value, '#et-fb-element_')
                     await compose.expectStyleValue({
                         'selector': targetedSelector,
                         ...global_style_value.margin_parent.expected
                     })
                 });
                 await test.step('Padding', async () => {
-                    await compose.settingsMargin(global_style_value.padding_parent.value,'#et-fb-element_')
+                    await compose.settingsMargin(global_style_value.padding_parent.value, '#et-fb-element_')
                     await compose.expectStyleValue({
                         'selector': targetedSelector,
                         ...global_style_value.margin_parent.expected
                     })
                 });
+                if (Author_spacing) {
+                    await test.step('Author Image Margin', async () => {
+                        await compose.settingsMargin(global_style_value.margin_parent.value, '#et-fb-author_image_')
+                        await compose.expectStyleValue({
+                            'selector': `${targetedSelector} .author-image`,
+                            ...global_style_value.author_margin_parent.expected
+                        })
+                    });
+                    await test.step('Author Image Padding', async () => {
+                        await compose.settingsMargin(global_style_value.padding_parent.value, '#et-fb-author_image_')
+                        await compose.expectStyleValue({
+                            'selector': `${targetedSelector} .author-image`,
+                            ...global_style_value.author_margin_parent.expected
+                        })
+                    });
+                }
             });
+
 
         }
 

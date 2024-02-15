@@ -249,6 +249,7 @@ export default async function (page, targetedSelector) {
 	await design_tab(page,targetedSelector,{
 		Alignment:true,
 		BodyText:true,
-		Spacing:true
+		Spacing:true,
+		Author_spacing:true
 	});
 }
