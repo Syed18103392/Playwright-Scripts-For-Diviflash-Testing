@@ -238,8 +238,6 @@ export default async function (page, targetedSelector: string, {
                     ...global_style_value.box_shadow_parent.expected
                 })
             });
-
-
         }
     });
 

@@ -1,4 +1,4 @@
-import { selectors } from '@playwright/test';
+import { test } from '@playwright/test';
 import { Page, expect } from '@playwright/test';
 import global_style_value from '../global-style-value.js'
 export class CompositionHelper {
@@ -17,9 +17,9 @@ export class CompositionHelper {
 	}
 	async useImage() {
 		await this.page.locator('.et-fb-settings-option-upload-type-image').click();
-		await this.page.locator('.media-frame-router #menu-item-browse').click();
-		await this.page.locator('li.attachment').nth(1).click();
-		await this.page.locator('.media-button-insert').click();
+		await this.page.locator('.media-modal.wp-core-ui #menu-item-browse').getByText('Media Library').last().click();
+		await this.page.locator('ul.attachments.ui-sortable.ui-sortable-disabled').last().locator('li.attachment').nth(1).click();
+		await this.page.locator('.media-modal.wp-core-ui').last().locator('.media-button-insert').click();
 	}
 	async settingsMargin(value, selector_prefix) {
 		await this.page.locator(`${selector_prefix}margin-input-top`).fill(value)
@@ -153,27 +153,6 @@ export class CompositionHelper {
 		}
 		await this.page.waitForLoadState();
 	}
-	async outsideWrapperTurnOn(element) {
-		await this.settingsSwitch({
-			label: 'Outside Inner Wrapper'
-		})
-		await this.expectVisiblity({
-
-			selector: `.df-cpt-inner-wrap ${element}`,
-			snap_label: 'Outside Image Turn on',
-			expect_visiblity: false
-		})
-	}
-	async outsideWrapperTurnOff(element) {
-		await this.settingsSwitch({
-			label: 'Outside Inner Wrapper'
-		})
-		await this.expectVisiblity({
-
-			selector: `.df-cpt-inner-wrap ${element}`,
-			snap_label: 'Outside Image turn off',
-		})
-	}
 
 	/**
 	 * Choose an icon from the icon list associated with a specified label.
@@ -252,11 +231,8 @@ export class CompositionHelper {
 
 
 	async settingsColor__Image() {
-		await this.page.locator('.et-fb-icon--background-image').click();
-		await this.page.locator('.et-fb-settings-option-upload-type-image').click();
-		await this.page.locator('.media-frame-router #menu-item-browse').click();
-		await this.page.locator('li.attachment').nth(1).click();
-		await this.page.locator('.media-button-insert').click();
+		await this.page.locator('div.et-fb-icon--background-image').click();
+		await this.useImage();
 	}
 
 	/**
@@ -334,11 +310,18 @@ export class CompositionHelper {
 			...global_style_value.bg_color_parent.reset_expected
 		})
 	}
+	async enable_element_toggle(){
+		
+		if(await this.page.$('.et-fb-form__toggle.et-fb-form__toggle-enabled[data-name=settings]')){
+			this.settingsToggle({label:'Element'});
+		}
+	}
 	async goto_parent() {
 		if (await this.page.$('.et-fb-settings-button--back-to-parent')) {
 			await this.page.locator('.et-fb-settings-button--back-to-parent').click();
 		}
 		await this.enableContentTab();
+
 	}
 	async settingsBackgroundGradient__DefaultDivi(selector) {
 		await this.settingsColorGradient_DefaultDivi();
@@ -368,40 +351,164 @@ export class CompositionHelper {
 		})
 
 	}
-	async settingsUseIcons(test_object, targetedSelector) {
-		//Check Default Behaviour 
-		await test_object.step('Default-Icon-Visiblity', async () => {
+	async settingsDisplay(test_object, targetedSelector) {
+
+		await test_object.step('Default=Inline Block', async () => {
+			await this.expectStyleValue({
+				selector: targetedSelector,
+				style_name: 'display',
+				expected_value: 'inline-flex'
+			})
+			await test_object.step('Align', async () => {
+				await test_object.step('Right', async () => {
+					await this.settingsSelectField({
+						label: 'Align',
+						option_name: 'Right'
+					})
+					await this.expectStyleValue({
+						selector: targetedSelector,
+						style_name: 'float',
+						expected_value: 'right'
+					})
+				});
+				await test_object.step('Default', async () => {
+					await this.settingsSelectField({
+						label: 'Align',
+						option_name: 'Default'
+					})
+					await this.expectStyleValue({
+						selector: targetedSelector,
+						style_name: 'float',
+						expected_value: 'none'
+					})
+				});
+			});
+
+		});
+		await test_object.step('Inline', async () => {
+			await this.settingsSelectField({
+				label: 'Display',
+				option_name: 'Inline'
+			})
+			await this.expectStyleValue({
+				selector: targetedSelector,
+				expected_value: 'inline',
+				style_name: 'display'
+			})
+			await test_object.step('Align', async () => {
+				await test_object.step('Right', async () => {
+					await this.settingsSelectField({
+						label: 'Align',
+						option_name: 'Right'
+					})
+					await this.expectStyleValue({
+						selector: targetedSelector,
+						style_name: 'float',
+						expected_value: 'right'
+					})
+				});
+				await test_object.step('Default', async () => {
+					await this.settingsSelectField({
+						label: 'Align',
+						option_name: 'Default'
+					})
+					await this.expectStyleValue({
+						selector: targetedSelector,
+						style_name: 'float',
+						expected_value: 'none'
+					})
+				});
+			});
+		});
+		await test_object.step('Block', async () => {
+			await this.settingsSelectField({
+				label: 'Display',
+				option_name: 'Block'
+			})
+			await this.expectStyleValue({
+				selector: targetedSelector,
+				expected_value: 'block',
+				style_name: 'display'
+			})
+		});
+	}
+
+
+	async settingsIconSettings(test_object, targetedSelector, only_icon = false) {
+		if (!only_icon) {
+			await test.step('Use Image', async () => {
+				this.useImage();
+				await this.expectVisiblity({
+					selector: `${targetedSelector} img.df-icon-image`,
+					snap_label: 'Author Icon Image',
+				})
+				await test.step('Image Width', async () => {
+					await this.settingsSlider({
+						label: 'Image Width',
+						...global_style_value.icon_image_width.value
+					})
+					await this.expectStyleValue({
+						selector: `${targetedSelector} img.df-icon-image`,
+						...global_style_value.icon_image_width.expected,
+					})
+				});
+				await test.step('Vertical alig', async () => {
+
+					await this.settingsSelectField({
+						label: 'Vertical align',
+						option_name: 'Middle',
+					})
+					await this.expectStyleValue({
+						selector: `${targetedSelector} img.df-icon-image `,
+						expected_value: 'middle',
+						style_name: 'vertical-align'
+					})
+				});
+			});
+		}
+
+		await test.step('Use Icon', async () => {
+			//Check Default Behaviour 
+			await test_object.step('Default-Icon-Visiblity', async () => {
+				await this.expectVisiblity({
+					selector: `${targetedSelector} .et-pb-icon`,
+					expect_visiblity: false
+				})
+			});
+
+			//Turn on icon toggle
+			await this.settingsSwitch({
+				label: 'Use Icon'
+			})
 			await this.expectVisiblity({
-				selector: `${targetedSelector} .et-pb-icon`,
-				expect_visiblity: false
-			})
-		});
-		await this.settingsSwitch({
-			label: 'Use Icon'
-		})
-		await this.expectVisiblity({
-			selector: `${targetedSelector} span.et-pb-icon`,
-		})
-		await test_object.step('Icon Color', async () => {
-			await this.settingsColor({
-				'label': 'Icon Color',
-				...global_style_value.element_color_parent.value
-			})
-			await this.expectStyleValue({
 				selector: `${targetedSelector} span.et-pb-icon`,
-				...global_style_value.element_color_parent.expected
 			})
-			this.page
-		});
-		await test_object.step('Icon Size', async () => {
-			await this.settingsSlider({
-				label: 'Icon Size',
-				...global_style_value.icon_size_parent.value
-			})
-			await this.expectStyleValue({
-				selector: `${targetedSelector} span.et-pb-icon`,
-				...global_style_value.icon_size_parent.expected
-			})
+
+			// Insert Icon Color
+			await test_object.step('Icon Color', async () => {
+				await this.settingsColor({
+					'label': 'Icon Color',
+					...global_style_value.element_color_parent.value
+				})
+				await this.expectStyleValue({
+					selector: `${targetedSelector} span.et-pb-icon`,
+					...global_style_value.element_color_parent.expected
+				})
+				this.page
+			});
+
+			//Insert Icon Size
+			await test_object.step('Icon Size', async () => {
+				await this.settingsSlider({
+					label: 'Icon Size',
+					...global_style_value.icon_size_parent.value
+				})
+				await this.expectStyleValue({
+					selector: `${targetedSelector} span.et-pb-icon`,
+					...global_style_value.icon_size_parent.expected
+				})
+			});
+
 		});
 	}
 	async settingsBackgroundImage__DefaultDivi(selector) {
@@ -461,7 +568,7 @@ export class CompositionHelper {
 		snap_label?: string,
 	}) {
 		if (snap_label != '') {
-			await this.page.screenshot({ path: `snapshots/expectVisiblity:${snap_label}.png` });
+			await this.page.screenshot();
 		}
 		if (await expect_visiblity) {
 

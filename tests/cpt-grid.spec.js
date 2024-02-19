@@ -67,23 +67,23 @@ test('CPT', async ({ }) => {
 	});
 	await test.step('Item ➡️  Read More Steps', async () => {
 		await insert_read_more_steps(page,'.df-cpt-button-wrap');
-		// await compose.goto_parent();
+		await compose.goto_parent();
 	})
-	// await test.step('Item ➡️  Image', async () => {
-	// 	await insert_image_steps(page,'.df-cpt-image-wrap');
-	// 	await compose.goto_parent();
-	// })
-	// await test.step('Item ➡️  Title', async () => {
-	// 	await insert_title_steps(page);
-	// 	await compose.goto_parent();
-	// })
-	// await test.step('Item ➡️  Content', async () => {
-	// 	await insert_content_steps(page, '.df-cpt-content-wrap');
-	// 	// await compose.goto_parent();
-	// })
-	// await test.step('Item ➡️  Publish Date', async () => {
-	// 	await insert_publish_date_steps(page);
-	// })
+	await test.step('Item ➡️  Image', async () => {
+		await insert_image_steps(page,'.df-cpt-image-wrap');
+		await compose.goto_parent();
+	})
+	await test.step('Item ➡️  Title', async () => {
+		await insert_title_steps(page,'.df-cpt-title-wrap');
+		await compose.goto_parent();
+	})
+	await test.step('Item ➡️  Content', async () => {
+		await insert_content_steps(page, '.df-cpt-content-wrap');
+		await compose.goto_parent();
+	})
+	await test.step('Item ➡️  Publish Date', async () => {
+		await insert_publish_date_steps(page,'.df-cpt-date-wrap');
+	})
 
 });
 
