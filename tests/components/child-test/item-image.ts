@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
-import { Global } from '../../../includes/global-fixures.ts';
 import { CompositionHelper } from '../../../includes/composition-helpers.ts';
-import design_tab from './item-design-tab.ts'
+import itemDesignTab from './item-design-tab.ts'
 import { ContentTab } from "./item-content-tab.ts";
 
 
@@ -16,17 +15,7 @@ export default async function (page, targetedSelector) {
 	 */
 	await test.step('Content', async () => {
 		await test.step('Elements', async () => {
-			await compose.settingsAddNewChildItem({ tooltip_name: 'Add New Item' });
-			await test.step('Type', async () => {
-				await compose.settingsSelectField({
-					label: 'Type',
-					option_name: 'Image',
-				})
-				await compose.expectVisiblity({
-					selector: `article ${targetedSelector}`,
-					snap_label: 'Post-Thumbnail'
-				})
-			});
+			await contentElement.addChildItem('Image');
 
 			await test.step('Outside Inner Wrapper ', async () => {
 				await contentElement.settingsOutsideInnerWrapper();
@@ -78,7 +67,7 @@ export default async function (page, targetedSelector) {
 			await contentElement.settingsModuleBackground()
 		});
 	});
-	await design_tab(page, targetedSelector, {
+	await itemDesignTab(page, targetedSelector, {
 		Alignment: true,
 		Spacing: true,
 		Border: true,

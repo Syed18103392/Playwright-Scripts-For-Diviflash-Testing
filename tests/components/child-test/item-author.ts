@@ -1,8 +1,7 @@
 import { test, expect, selectors } from "@playwright/test";
-import { Global } from '../../../includes/global-fixures.ts';
 import { CompositionHelper } from '../../../includes/composition-helpers.ts';
 import global_style_value from '../../../global-style-value.js';
-import design_tab from './item-design-tab.ts'
+import itemDesignTab from './item-design-tab.ts'
 import { ContentTab } from "./item-content-tab.ts";
 
 
@@ -16,18 +15,7 @@ export default async function (page, targetedSelector) {
 	await test.step('Content', async () => {
 		await test.step('Element', async () => {
 			await test.step('✅ Select Post Title: and check visiblity', async () => {
-				await compose.settingsAddNewChildItem({ tooltip_name: 'Add New Item' });
-				//Add Type Of The Item
-				await compose.settingsSelectField({
-
-					label: 'Type',
-					option_name: 'Author',
-				})
-				await compose.expectVisiblity({
-
-					selector: 'article .df-cpt-author-wrap a',
-					snap_label: 'Post-Read-more-button'
-				})
+				await contentElement.addChildItem('Author');
 			});
 			await test.step('Outside Inner Wrapper', async () => {
 				await contentElement.settingsOutsideInnerWrapper()
@@ -100,13 +88,13 @@ export default async function (page, targetedSelector) {
 			await compose.settingsToggle({
 				label: 'Icon Settings'
 			})
-			await compose.settingsIconSettings(test, targetedSelector)
+			await contentElement.contentIconSettings()
 		});
 		await test.step('Module Background', async () => {
 			await contentElement.settingsModuleBackground()
 		});
 	});
-	await design_tab(page, targetedSelector, {
+	await itemDesignTab(page, targetedSelector, {
 		Alignment: true,
 		BodyText: true,
 		Spacing: true,

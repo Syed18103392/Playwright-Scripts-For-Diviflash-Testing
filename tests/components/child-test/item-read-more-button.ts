@@ -1,9 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { Global } from '../../../includes/global-fixures.ts';
 import { CompositionHelper } from '../../../includes/composition-helpers.ts';
-import exp from "constants";
-import design_tab from './item-design-tab.ts'
+import itemDesignTab from './item-design-tab.ts'
 import { ContentTab } from "./item-content-tab.ts";
+
 
 
 export default async function (page,targetedSelector) {
@@ -17,17 +16,9 @@ export default async function (page,targetedSelector) {
               //Add Type Of The Item
               await test.step('Element', async () => {
                      await test.step('✅ Select Post Title: and check visiblity', async () => {
-                            await compose.settingsAddNewChildItem({ tooltip_name: 'Add New Item' });
-                            await test.step('Type', async () => {
-                                   await compose.settingsSelectField({
-                                          label: 'Type',
-                                          option_name: 'Read More Button',
-                                   })
-                                   await compose.expectVisiblity({
-                                          selector: `article ${targetedSelector}`,
-                                          snap_label: 'Post-Read-more-button'
-                                   })
-                            });
+				await test.step('Add Child Item Type', async () => {
+					await contentElement.addChildItem('Read More Button');
+				});
                             await test.step('Read More Text', async () => {
                                    await compose.settingsFillInputField({
                                           label:'Read More Text',
@@ -44,7 +35,7 @@ export default async function (page,targetedSelector) {
                                    label:'Icon Settings'
                             })
 
-                            await compose.settingsIconSettings(test,targetedSelector,true)
+                            await contentElement.contentIconSettings(true);
                      });
                      
 
@@ -53,7 +44,7 @@ export default async function (page,targetedSelector) {
 			await contentElement.settingsModuleBackground()
 		});
        });
-await design_tab(page,targetedSelector,{
+await itemDesignTab(page,targetedSelector,{
        Alignment:true,
        BodyText:true,
        Spacing:true,

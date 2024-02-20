@@ -1,9 +1,6 @@
 import { test, expect } from "@playwright/test";
-import { Global } from '../../../includes/global-fixures.ts';
 import { CompositionHelper } from '../../../includes/composition-helpers.ts';
 import global_style_value from '../../../global-style-value.js';
-import { text } from "stream/consumers";
-import { loadavg } from "os";
 
 export default async function (page, targetedSelector: string, {
     Alignment = false,
@@ -68,7 +65,7 @@ export default async function (page, targetedSelector: string, {
                         label: 'Body Font Style',
                         ...global_style_value.text_style_uppercase.value
                     })
-                    await page.screenshot({ path: './../../../snapshots/bodyfontstyle.png' });
+                    await page.screenshot();
                     await compose.expectStyleValue({
                         selector: targetedSelector,
                         ...global_style_value.text_style_uppercase.expected
@@ -79,7 +76,7 @@ export default async function (page, targetedSelector: string, {
                         label: 'Body Text Alignment',
                         ...global_style_value.text_align_child.value
                     })
-                    await page.screenshot({ path: './../../../snapshots/bodytextalignment.png' });
+                    await page.screenshot();
                     await compose.expectStyleValue({
                         selector: targetedSelector,
                         ...global_style_value.text_align_child.expected

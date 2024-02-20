@@ -47,19 +47,19 @@ export class Global {
 
               if (isPluginActivated) {
                      // console.trace(`Plugin Status: ${isPluginActivated}`);
-                     await this.page.screenshot({ path: 'snapshots/pluginActivatePanel.png' });
+                     await this.page.screenshot();
                      expect(this.page.locator('.button').filter({ hasText: 'Replace current with uploaded' })).toBeVisible();
                      await this.page.locator('.button').filter({ hasText: 'Replace current with uploaded' }).click();
               }
               else {
                      console.log('not replace');
-                     await this.page.screenshot({ path: 'snapshots/pluginActivatePanel.png' });
+                     await this.page.screenshot();
                      expect(this.page.locator('.button').filter({ hasText: 'Activate Plugin' })).toBeVisible();
 
                      await this.page.locator('.button').filter({ hasText: 'Activate Plugin' }).click();
               }
               await this.page.goto(`${wordpressURL}/wp-admin/plugins.php`);
-              await this.page.screenshot({ path: 'snapshots/pluginthis.Page.png' });
+              await this.page.screenshot();
               await expect(await this.page.getByLabel('Deactivate DiviFlash')).toBeVisible();
        }
        async openDiviBuilder(page) {

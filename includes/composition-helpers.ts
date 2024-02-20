@@ -434,83 +434,7 @@ export class CompositionHelper {
 	}
 
 
-	async settingsIconSettings(test_object, targetedSelector, only_icon = false) {
-		if (!only_icon) {
-			await test.step('Use Image', async () => {
-				this.useImage();
-				await this.expectVisiblity({
-					selector: `${targetedSelector} img.df-icon-image`,
-					snap_label: 'Author Icon Image',
-				})
-				await test.step('Image Width', async () => {
-					await this.settingsSlider({
-						label: 'Image Width',
-						...global_style_value.icon_image_width.value
-					})
-					await this.expectStyleValue({
-						selector: `${targetedSelector} img.df-icon-image`,
-						...global_style_value.icon_image_width.expected,
-					})
-				});
-				await test.step('Vertical alig', async () => {
 
-					await this.settingsSelectField({
-						label: 'Vertical align',
-						option_name: 'Middle',
-					})
-					await this.expectStyleValue({
-						selector: `${targetedSelector} img.df-icon-image `,
-						expected_value: 'middle',
-						style_name: 'vertical-align'
-					})
-				});
-			});
-		}
-
-		await test.step('Use Icon', async () => {
-			//Check Default Behaviour 
-			await test_object.step('Default-Icon-Visiblity', async () => {
-				await this.expectVisiblity({
-					selector: `${targetedSelector} .et-pb-icon`,
-					expect_visiblity: false
-				})
-			});
-
-			//Turn on icon toggle
-			await this.settingsSwitch({
-				label: 'Use Icon'
-			})
-			await this.expectVisiblity({
-				selector: `${targetedSelector} span.et-pb-icon`,
-			})
-
-			// Insert Icon Color
-			await test_object.step('Icon Color', async () => {
-				await this.settingsColor({
-					'label': 'Icon Color',
-					...global_style_value.element_color_parent.value
-				})
-				await this.expectStyleValue({
-					selector: `${targetedSelector} span.et-pb-icon`,
-					...global_style_value.element_color_parent.expected
-				})
-				this.page
-			});
-
-			//Insert Icon Size
-			await test_object.step('Icon Size', async () => {
-				await this.settingsSlider({
-					label: 'Icon Size',
-					...global_style_value.icon_size_parent.value
-				})
-				await this.expectStyleValue({
-					selector: `${targetedSelector} span.et-pb-icon`,
-					...global_style_value.icon_size_parent.expected
-				})
-			});
-
-		});
-	}
 	async settingsBackgroundImage__DefaultDivi(selector) {
 
 		await this.settingsColor__Image();
@@ -551,7 +475,7 @@ export class CompositionHelper {
 		expected_value: string,
 	}) {
 		await this.page.waitForLoadState();
-		await this.page.screenshot({ path: `snapshots/expectVisiblity:${selector}.png` });
+		await this.page.screenshot();
 		await expect.soft(await this.page.frameLocator('iFrame').locator(selector).first()).toHaveCSS(style_name, expected_value);
 	}
 	//!SECTION

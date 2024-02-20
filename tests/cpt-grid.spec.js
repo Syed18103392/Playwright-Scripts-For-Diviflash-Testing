@@ -8,7 +8,8 @@ import insert_image_steps from './components/child-test/item-image.ts';
 import insert_title_steps from './components/child-test/item-title.ts';
 import insert_content_steps from './components/child-test/item-content.ts';
 import insert_publish_date_steps from './components/child-test/item-publish-date.ts';
-
+import insert_taxonomy_steps from './components/child-test/item-taxonomy.ts';
+import { ContentTab } from "./components/child-test/item-content-tab.ts";
 
 // import * as compose from "../includes/composition-helpers.ts";
 
@@ -33,6 +34,7 @@ test.beforeAll(async ({ browser }) => {
 	page = await context.newPage();
 	const global_fixture = new Global(page);
 	const compose = new CompositionHelper(page);
+	const contentElement = new ContentTab(page)
 
 	await page.goto('/wp-admin/edit.php?post_type=page');
 	await global_fixture.createPage({
@@ -48,10 +50,7 @@ test.beforeAll(async ({ browser }) => {
 		});
 	}, true);
 	// CPT Settings Select Post Type = Post
-	await compose.settingsSelectField({
-		label: 'Post Type',
-		option_name: 'Posts',
-	});
+	await contentElement.postType('Posts')
 });
 
 
@@ -83,6 +82,11 @@ test('CPT', async ({ }) => {
 	})
 	await test.step('Item ➡️  Publish Date', async () => {
 		await insert_publish_date_steps(page,'.df-cpt-date-wrap');
+		await compose.goto_parent();
+	})
+	await test.step('Item ➡️  Texonomy', async () => {
+		await insert_taxonomy_steps(page,'.df-cpt-taxonomies');
+		
 	})
 
 });

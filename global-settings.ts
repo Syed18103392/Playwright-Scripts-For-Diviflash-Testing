@@ -25,7 +25,7 @@ async function globalSetup(config: FullConfig) {
        const browser = await chromium.launch();
        const page = await browser.newPage();
        await page.goto(`${baseURL}wp-admin`);
-       await page.screenshot({ path: 'snapshots/global-login-page.png' });
+       await page.screenshot();
        await page.getByLabel("Username or Email Address").fill(credential.login_username);
        await page.getByLabel("Password", { exact: true }).click();
        await page.getByLabel("Password", { exact: true }).fill(credential.login_password);

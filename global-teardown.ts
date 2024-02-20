@@ -16,7 +16,7 @@ async function globalTeaardown(config: FullConfig) {
     await page.getByLabel("Password", { exact: true }).click();
     await page.getByLabel("Password", { exact: true }).fill(credential.login_password);
     await page.getByRole("button", { name: "Log In" }).click();
-    await page.screenshot({ path: 'snapshots/global-logout-page.png' });
+    await page.screenshot();
     await page.locator('#cb-select-all-1').check();
     if(await page.$('select#bulk-action-selector-top')){
         await page.locator('select#bulk-action-selector-top').selectOption('trash');
