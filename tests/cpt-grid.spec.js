@@ -9,6 +9,7 @@ import insert_title_steps from './components/child-test/item-title.ts';
 import insert_content_steps from './components/child-test/item-content.ts';
 import insert_publish_date_steps from './components/child-test/item-publish-date.ts';
 import insert_taxonomy_steps from './components/child-test/item-taxonomy.ts';
+import insert_custom_text_steps from './components/child-test/item-custom-text.ts';
 import { ContentTab } from "./components/child-test/item-content-tab.ts";
 
 // import * as compose from "../includes/composition-helpers.ts";
@@ -60,33 +61,37 @@ test.beforeAll(async ({ browser }) => {
 test('CPT', async ({ }) => {
 	const compose = new CompositionHelper(page);
 
-	await test.step('Item ➡️  Author', async () => {
-		await insert_author_steps(page,'.df-cpt-author-wrap');
-		await compose.goto_parent();
-	});
-	await test.step('Item ➡️  Read More Steps', async () => {
-		await insert_read_more_steps(page,'.df-cpt-button-wrap');
-		await compose.goto_parent();
-	})
-	await test.step('Item ➡️  Image', async () => {
-		await insert_image_steps(page,'.df-cpt-image-wrap');
-		await compose.goto_parent();
-	})
-	await test.step('Item ➡️  Title', async () => {
-		await insert_title_steps(page,'.df-cpt-title-wrap');
-		await compose.goto_parent();
-	})
-	await test.step('Item ➡️  Content', async () => {
-		await insert_content_steps(page, '.df-cpt-content-wrap');
-		await compose.goto_parent();
-	})
-	await test.step('Item ➡️  Publish Date', async () => {
-		await insert_publish_date_steps(page,'.df-cpt-date-wrap');
-		await compose.goto_parent();
-	})
-	await test.step('Item ➡️  Texonomy', async () => {
-		await insert_taxonomy_steps(page,'.df-cpt-taxonomies');
+	// await test.step('Item ➡️  Author', async () => {
+	// 	await insert_author_steps(page,'.df-cpt-author-wrap');
+	// 	await compose.goto_parent();
+	// });
+	// await test.step('Item ➡️  Read More Steps', async () => {
+	// 	await insert_read_more_steps(page,'.df-cpt-button-wrap');
+	// 	await compose.goto_parent();
+	// })
+	// await test.step('Item ➡️  Image', async () => {
+	// 	await insert_image_steps(page,'.df-cpt-image-wrap');
+	// 	await compose.goto_parent();
+	// })
+	// await test.step('Item ➡️  Title', async () => {
+	// 	await insert_title_steps(page,'.df-cpt-title-wrap');
+	// 	await compose.goto_parent();
+	// })
+	// await test.step('Item ➡️  Content', async () => {
+	// 	await insert_content_steps(page, '.df-cpt-content-wrap');
+	// 	await compose.goto_parent();
+	// })
+	// await test.step('Item ➡️  Publish Date', async () => {
+	// 	await insert_publish_date_steps(page,'.df-cpt-date-wrap');
+	// 	await compose.goto_parent();
+	// })
+	// await test.step('Item ➡️  Texonomy', async () => {
+	// 	await insert_taxonomy_steps(page,'.df-cpt-taxonomies');
+	// 	await compose.goto_parent();
 		
+	// })
+	await test.step('Item ➡️  Custom Text', async () => {
+		await insert_custom_text_steps(page,'.df-cpt-custom-text');
 	})
 
 });

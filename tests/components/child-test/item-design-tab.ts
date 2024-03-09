@@ -2,6 +2,12 @@ import { test, expect } from "@playwright/test";
 import { CompositionHelper } from '../../../includes/composition-helpers.ts';
 import global_style_value from '../../../global-style-value.js';
 
+/**
+ * Apply design elements to a specified page element.
+ * @param {Page} page - Playwright page object.
+ * @param {string} targetedSelector - CSS selector for the targeted element.
+ * @param {Object} options - Design options for various elements.
+ */
 export default async function (page, targetedSelector: string, {
     Alignment = false,
     ImageSettings = false,

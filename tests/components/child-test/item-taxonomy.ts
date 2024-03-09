@@ -26,23 +26,25 @@ export default async function (page, targetedSelector) {
                         })
 
                     });
-
+                    
                 });
 
             });
-
-
-
+            await test.step('Outside Inner Wrapper', async () => {
+                await contentElement.settingsOutsideInnerWrapper();
+            });
             await test.step('Display', async () => {
                 await contentElement.cssDisplay();
             });
         });
+
         await test.step('Icon Settings', async () => {
             
             await compose.settingsToggle({
 				label: 'Icon Settings'
 			})
             await contentElement.contentIconSettings();
+
         });
     });
 

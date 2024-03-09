@@ -8,10 +8,6 @@ import { ContentTab } from "./item-content-tab.ts";
 export default async function (page, targetedSelector) {
 	const compose = new CompositionHelper(page);
 	const contentElement = new ContentTab(page,targetedSelector);
-	/**
-	 * Add New Item 
-	 * Type: Content
-	 */
 	await test.step('Content', async () => {
 		await test.step('Element', async () => {
 			await test.step('✅ Select Post Title: and check visiblity', async () => {

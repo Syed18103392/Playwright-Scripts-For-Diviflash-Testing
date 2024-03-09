@@ -1,5 +1,11 @@
-import { Page, test, expect } from "@playwright/test";
-import { CompositionHelper } from '../../../includes/composition-helpers.ts';
+import {
+    Page,
+    test,
+    expect
+} from "@playwright/test";
+import {
+    CompositionHelper
+} from '../../../includes/composition-helpers.ts';
 import global_style_value from '../../../global-style-value.js';
 
 export class ContentTab extends CompositionHelper {
@@ -22,7 +28,9 @@ export class ContentTab extends CompositionHelper {
     }
 
     async addChildItem(child_name, check_visiblity = true) {
-        await this.settingsAddNewChildItem({ tooltip_name: 'Add New Item' });
+        await this.settingsAddNewChildItem({
+            tooltip_name: 'Add New Item'
+        });
         await test.step('Type', async () => {
             await this.settingsSelectField({
                 label: 'Type',
@@ -37,7 +45,8 @@ export class ContentTab extends CompositionHelper {
 
         });
     }
-    async htmlTags(settings_label: string, tags: Array<string>, option_suffix) {
+
+    async htmlTags(settings_label: string, tags: Array < string > , option_suffix) {
 
         const tag_count = tags.length;
         for (let i = 0; i < tag_count; ++i) {
@@ -48,6 +57,7 @@ export class ContentTab extends CompositionHelper {
                     label: settings_label,
                     option_name: tags[i]
                 })
+
                 await this.expectVisiblity({
                     selector: `${this.targetedSelector} ${(tag_name)}`
                 })
@@ -56,30 +66,39 @@ export class ContentTab extends CompositionHelper {
 
     }
 
-    async settingsModuleBackground() {
-        await this.settingsToggle({ label: 'Background' });
-
-        await test.step('Color', async () => {
-            await this.settingsBackgroundColor__DefaultDivi(this.targetedSelector);
+    async settingsModuleBackground(color = true, gradient = true, image = true) {
+        await this.settingsToggle({
+            label: 'Background'
         });
 
-        await test.step('Transparent', async () => {
-            await this.settingsBackgroundTransparent__DefaultDivi(this.targetedSelector);
-        });
+        if (color) {
+            //Color
+            await test.step('Color', async () => {
+                await this.settingsBackgroundColor__DefaultDivi(this.targetedSelector);
+            });
+            await test.step('Transparent', async () => {
+                await this.settingsBackgroundTransparent__DefaultDivi(this.targetedSelector);
+            });
+        }
 
-        // await test.step('Gradient', async () => {
-        //     await this.settingsBackgroundGradient__DefaultDivi(this.targetedSelector);
-        // });
+        if (gradient) {
+            // gradient 
+            await test.step('Gradient', async () => {
+                await this.settingsBackgroundGradient__DefaultDivi(this.targetedSelector);
+            });
+        }
 
-        // await test.step('Image', async () => {
-        //     await this.settingsBackgroundImage__DefaultDivi(this.targetedSelector);
-        // });
+        if (image) {
+            await test.step('Image', async () => {
+                await this.settingsBackgroundImage__DefaultDivi(this.targetedSelector);
+            });
+        }
     }
     async contentIconSettings(only_icon = false) {
         if (!only_icon) {
 
             await test.step('Use Image', async () => {
-                
+
                 //insert image
                 this.useImage();
                 await this.expectVisiblity({
@@ -159,37 +178,40 @@ export class ContentTab extends CompositionHelper {
 
         });
     }
-    async cssDisplay() {
+    async cssDisplay(withAlignment = true) {
         await test.step('Default=Inline Block', async () => {
             await this.expectStyleValue({
                 selector: this.targetedSelector,
                 style_name: 'display',
                 expected_value: 'inline-flex'
             })
-            await test.step('Align', async () => {
-                await test.step('Right', async () => {
-                    await this.settingsSelectField({
-                        label: 'Align',
-                        option_name: 'Right'
-                    })
-                    await this.expectStyleValue({
-                        selector: this.targetedSelector,
-                        style_name: 'float',
-                        expected_value: 'right'
-                    })
+            if (withAlignment) {
+                await test.step('Align', async () => {
+                    await test.step('Right', async () => {
+                        await this.settingsSelectField({
+                            label: 'Align',
+                            option_name: 'Right'
+                        })
+                        await this.expectStyleValue({
+                            selector: this.targetedSelector,
+                            style_name: 'float',
+                            expected_value: 'right'
+                        })
+                    });
+                    await test.step('Default', async () => {
+                        await this.settingsSelectField({
+                            label: 'Align',
+                            option_name: 'Default'
+                        })
+                        await this.expectStyleValue({
+                            selector: this.targetedSelector,
+                            style_name: 'float',
+                            expected_value: 'none'
+                        })
+                    });
                 });
-                await test.step('Default', async () => {
-                    await this.settingsSelectField({
-                        label: 'Align',
-                        option_name: 'Default'
-                    })
-                    await this.expectStyleValue({
-                        selector: this.targetedSelector,
-                        style_name: 'float',
-                        expected_value: 'none'
-                    })
-                });
-            });
+            }
+
 
         });
         await test.step('Inline', async () => {
@@ -202,30 +224,33 @@ export class ContentTab extends CompositionHelper {
                 expected_value: 'inline',
                 style_name: 'display'
             })
-            await test.step('Align', async () => {
-                await test.step('Right', async () => {
-                    await this.settingsSelectField({
-                        label: 'Align',
-                        option_name: 'Right'
-                    })
-                    await this.expectStyleValue({
-                        selector: this.targetedSelector,
-                        style_name: 'float',
-                        expected_value: 'right'
-                    })
+            if (withAlignment) {
+                await test.step('Align', async () => {
+                    await test.step('Right', async () => {
+                        await this.settingsSelectField({
+                            label: 'Align',
+                            option_name: 'Right'
+                        })
+                        await this.expectStyleValue({
+                            selector: this.targetedSelector,
+                            style_name: 'float',
+                            expected_value: 'right'
+                        })
+                    });
+                    await test.step('Default', async () => {
+                        await this.settingsSelectField({
+                            label: 'Align',
+                            option_name: 'Default'
+                        })
+                        await this.expectStyleValue({
+                            selector: this.targetedSelector,
+                            style_name: 'float',
+                            expected_value: 'none'
+                        })
+                    });
                 });
-                await test.step('Default', async () => {
-                    await this.settingsSelectField({
-                        label: 'Align',
-                        option_name: 'Default'
-                    })
-                    await this.expectStyleValue({
-                        selector: this.targetedSelector,
-                        style_name: 'float',
-                        expected_value: 'none'
-                    })
-                });
-            });
+            }
+
         });
         await test.step('Block', async () => {
             await this.settingsSelectField({
@@ -239,7 +264,7 @@ export class ContentTab extends CompositionHelper {
             })
         });
     }
-    async settingsOutsideInnerWrapper(): Promise<void> {
+    async settingsOutsideInnerWrapper(): Promise < void > {
         await test.step('Outside InnerWrapper On', async () => {
             await this.settingsSwitch({
                 label: 'Outside Inner Wrapper'
